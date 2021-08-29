@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head><title>AAJEE sample</title>
+    <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body style="background-color:rgb(107, 172, 238);">
+    <table align="center" width="50%" border="0" class="main" bgcolor="fffec4">
+        <tr align="center">
+            <td>
+                <h2>Brightness and Magnitude</h2>
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+                <img src="https://astronomy.com/~/media/11F543BC2A924D03B479974C42C6D1E2.jpg" width="500" height="auto">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Examine the above image carefully. What do you see?<br>These are condensed balls of gas suspended in the void of space. Some of them are closer to us than others.
+                Some are bigger than others, and they have differing colours as well. Also, you may not see it but about half of them are actually binary-star systems. Meaning they are two stars orbiting each other.
+                <br><br>
+                But just looking at the sky we can't know all that, all we see are point sources of light. And it would be a good idea to somehow put them in categories. Let us not
+                worry about the distance for now. We will only think about how bright a star seems to us as seen from Earth. It is possible that a bigger star farther 
+                away may look fainter than a smaller star closer to us; but at the moment all we care about is how bright the light source looks to us.
+                <br><br>
+                Okay, so we need a scale. We need a scale on which we can place any star that we see, in other words assign a value to its brightness. Let us first think about 
+                what our boundaries are. Go back to the image and find the brightest star there and the dimmest star there. Of course, we should be doing that for the entire night sky
+                and not just this image, but for our example's sake assume that the bright star in the image is the brightest star in the sky.
+                <br> By the way, the astrophotograph attached features the pretty constellation of Lyra and the bright star is the star Vega. 
+                <br> Now, the dimmest and the brightest star in this picture make the boundaries of our scale. We can say that the dimmest star has the magnitude 1 and the brightest star has the magnitude 10.
+                This would be a simple scale. The rest of the stars then will fall somewhere on this line. But how? In other words, will the magnitude 10 star be 10 times brighter than 
+                the magnitude 1 star, or would it be 100 times brighter, a billion times brighter?
+                <br><br>
+                But before we go there, I must disappoint you a little. In Astronomy a large number of things are dictated by convention. So let us look at a little bit of history.
+                Ancient Greek astronomers (it was likely Hipparcus) created a 6 class system of classification. The brightest stars in the sky were placed in 'class 1', and the ones
+                at the edge of darkness, just barely visible to the naked eyes were placed in 'class 6'. This system is inverted, smaller the number, brighter the star.
+                <br> Back then they did not have telescopes or cameras, hence they were limited in the dimmest star they could see. Now we can easily see up to class 20 star with
+                modern telescopes (if the old class system were still in use).
+                <br><br>
+                This system was used for almost two millenia. It was in the nineteenth century when people started to make precise measurements of brightnesses of stars,
+                and this system could no longer be used. We needed a more precise system. And that was when the current magnitude system was developed. It was created so 
+                that the old classes still made sense. So magnitude 1 stars are still the brightest stars in the sky, and magnitude 6 or 7 is the limit for our naked eyes.
+                <br><br> Now to answer the previous question: they made it so that a magnitude 1 star was exactly 100 times brighter than a magnitude 6 star.
+                <br><br><h4>This brings us to our first exercise.</h4>
+                <h4>Q1. If the brightest star in the sky has the brightness I<sub>1</sub>, and is assigned the magnitude of 1.0 then:
+                    <br>a) According to the system described above, what must be the brightness of a star with magnitude 6.0 in terms of I<sub>1</sub>?
+                    <br>b) What must be the brightness of a star with magnitude 4.0?
+                    <br>c) Can you come up with a general mathematical formula that allows us to find brightness of a star with given magnitude relative to the brightness of this magnitude 1.0 star? (Hint: think about logarithms.)
+                    <br>d) If your answer to the above question was 'yes', what is that formula?
+                </h4>
+
+                <br><br> It is advised that you proceed with this lesson only after completing the above exercise.
+                <br> Okay, so now we have a formula that describes the relationship between magnitude and brightness. You should ask at this point, what are the units of I<sub>1</sub>?
+                How do we measure this brightness? Simply, here you can open the image and count the number of pixels a star occupies (if you want a more precise number
+                multiply the brightness of the pixel when you add them). We call it the instrumental magnitude. In reality, the better term for brightness is luminosity 
+                and her units are those of power (watt in SI).
+                <br> But luminosity is a tricky concept, because a very large star looks small and dim to us if it is far away. Think about the Sun, it is the brightest star in the sky (I am sorry that earlier I kept talking like it was Vega or Sirius), but it
+                is a very average star, meaning a lot of stars in the sky are actually bigger and more luminous than the Sun. Sirius is more luminous than the Sun (let us call our Sun 'Sol') but since it is very far away from the Earth it appears so much smaller.
+                <br><br> So here we stumble upon the important distinction between <b>"Apparent magnitude"</b> and <b>"Absolute magnitude"</b>.
+                <br>Imagine you are floating in space, and when you look around you see that you are inside a shell. The shell is comprised of stars, some small, some big, some hot, some cold. But they
+                all are at the same distance from you. If you know that they are all at the same distance from you, you can be sure that the brighter star is actually more luminous.
+                In this hypothetical scenario, luminosity and magnitude could be used interchangeably. 
+                <br>Apparent magnitude of a star is the magnitude of it as we observe it from Earth, and absolute magnitude of a star
+                is the magnitude observed if the star were at a fixed specific distance from us.
+
+                <br><br>Let me come back to the Sun. Apparently it is a billion times brighter than Sirius (the brightest star in the <b>night</b> sky), but absolutely it is dimmer than Sirius.
+                If we placed both of them at a distance of 10 parsecs, we would think that the Sun is a magnitude 4.2 star and Sirius is a magnitude 1.4 star.
+                <br><br>Okay, coming back to magnitudes. Considering that the Sun was not considered a star, it was not placed in class 1. It is clear that it is much much
+                brighter than Vega, a magnitude 1 star; what would be the apparent magnitude of the Sun?
+                <br><br><h4>Q2. Assume that the Sun's apparent brightness is 10^10 times that of Vega. Vega's apparent magnitude is 0.0. Use the formula you created in Q1(d) 
+                    to calculate the apparent magnitude of the Sun. Don't be shocked.
+                </h4>
+                <br>As always, don't proceed unless you have an answer.
+                <br>You might be wondering, why is the scale logarithmic? Why didn't they make it linear? There are a couple of reasons. Firstly, the brightnesses of the stars
+                in the sky have a dramatically large range which would not fit easily on a linear scale. And secondly, due to the 'Weber-Fechner principle/law' which states
+                that the relation between physical stimuli and sensory interpretation is logarithmic. This is why the loudness scale is also logarithmic, 60 decibels is 10 times louder than 50 decibels.
+                <br><br> I forgot to mention, the scale also needs fixed points to calibrate with. This is why either Sun or Vega is used as a reference. 
+                <br><br>Let us now think about the effect of distance on apparent brightness. Thw following is a slightly difficult exercise that should hopefully give you
+                an idea of how distance and apparent brightness are related.
+                <h4>Q3. You live on top of a small hill in a village. One night, electricity suddenly disappears, plunging the town in darkness. You go out of your house and
+                    notice that there are two bulbs in the village still burning. You remember that they were the recently bought battery powered spherical bulbs. You notice that one 
+                    of them seems brighter than the other, however since both of them are identical products it must imply that the brighter one is closer.
+                    <br> You happen to have a telescope and a photo-electric detector with you. You know that the closer bulb belongs to Charlie who lives exactly 1km from your house (bird's path). 
+                    The farther bulb belongs to Guddu, but you do not know how far he lives. You point your telescope to Charlie's house and find that the bulb from his house creates a voltage
+                    of 64eV in your detector's chip. Now you point it towards Guddu's house and this time it shows 36eV. How far do you think Guddu lives from you?
+                    <br> (Hint: chaar pay aar square)
+                </h4>
+                <h4>
+                    Q4. You live on top of a hill in a village. One night the electricity disappears, plunging the entire town into darkness except one bulb which belongs to Sweety. 
+                    You remember that the bulb gives 60 watt output. You grab your telescope and photoelectric detector, and point it towards the bulb.
+                    You have a device that tells you the received wattage on the telescope mirror, and it reads 0.00006 watts. Your telescope mirror has the diameter of 50cm (assume it to be circular). How far are you from Sweety's bulb?
+                </h4>
+                <h4>Q5. Jupiter's apparent magnitude is -2.0.
+                    <br> a) What would his apparent magnitude be if he were twice as far away?
+                    <br> b) What would his apparent magnitude be if his radius were half as much? (Hint: surface area is everything)
+                </h4>
+            </td>
+        </tr>
+        <tr>
+            <td align="center"><i>Note: This content (both the write-up and the questions) is original and the copyright belongs to Yashodhan Manerikar. Kindly do not reproduce without permission, I am a broke graduate trying to pay bills.</i></td>
+        </tr>
+    </table>
+
+</table>
+</body>
+</html>
