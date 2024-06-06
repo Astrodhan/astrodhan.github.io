@@ -1,0 +1,64 @@
+body{
+    background-color: #91c3ff;
+    background-image: url("peanobgblue.png");
+    background-repeat: repeat;
+    background-size: 600px 600px; 
+    background-position: center;
+}
+
+table{
+    background-color: #fcf9c2;
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+    border: "0";
+}
+
+.intable{
+    background-color: #fcf9c2;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    border: "0";
+}
+
+.arttable{
+    background-color: transparent;
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+    border: "0";
+}
+
+td{
+    background-color: #fcf9c2;
+    text-align: left;
+    color:rgb(0, 0, 0); 
+}
+
+.centertd{
+    background-color: #fcf9c2;
+    text-align: center;
+    color:rgb(0, 0, 0); 
+}
+
+.arttd{
+    background-color: transparent;
+    text-align: center;
+}
+
+.h1{
+    font-size: larger; 
+}
+
+.shadowB{
+    text-shadow: 2px 2px 2px black;
+}
+
+.shadowW{
+    text-shadow: 2px 2px 2px white;
+}
+
+.shadowR{
+    text-shadow: 1px 1px red;
+}
