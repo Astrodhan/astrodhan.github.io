@@ -56,3 +56,39 @@ td{
 .shadowR{
     text-shadow: 1px 1px red;
 }
+
+/* Styles for smartphones */
+@media screen and (max-width: 800px) {
+    body{
+    background-color: #91c3ff;
+    background-image: url("icons/peanobgblue.png");
+    background-repeat: repeat;
+    background-size: 600px 600px; 
+    background-position: center;
+    }
+
+    table{
+    background-color: #fffec4;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    border: "0";
+	}
+
+    .intable{
+    background-color: #fffec4;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    border: "0";
+    }
+
+    .arttable{
+    background-color: transparent;
+    margin-left: auto;
+    margin-right: auto;
+    width: 85%;
+    border: "0";
+    }
+
+}
