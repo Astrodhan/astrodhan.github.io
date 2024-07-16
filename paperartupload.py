@@ -8,7 +8,7 @@ images_folder = "/home/yashodhan/Documents/website/astrodhan.github.io/dirart/Pa
 gallery_html_file = "/home/yashodhan/Documents/website/astrodhan.github.io/dirart/paper.html"
 
 # Get list of image files in the images folder
-images = [f for f in os.listdir(images_folder) if os.path.isfile(os.path.join(images_folder, f))]
+images = sorted([f for f in os.listdir(images_folder) if os.path.isfile(os.path.join(images_folder, f))])
 
 numberOfImages = len(images)
 
