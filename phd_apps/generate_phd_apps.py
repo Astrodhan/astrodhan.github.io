@@ -195,7 +195,8 @@ for program in programs:
         <h2>{program['name']}</h2>
         <p><strong>Organising research institutes and universities:</strong> {program['institutes']}</p>
         <p><strong>Deadline:</strong> <span class="bold deadline-box">{formatted_deadline}</span></p>
-        <p><strong>Send recommendation letters to:</strong> <span class="bold">{program['email']}</span></p>
+        <p><strong>Point of contact:</strong> <span class="bold">{program['email']}</span></p>
+        <p><strong>How to send reference letter:</strong> <span class="bold">{program['ref_letter']}</span></p>
         <p><strong>Link to advertisement:</strong> <a class="application-link" href="{program['ad_link']}">View Advertisement</a></p>
         <p><strong>Link to department(s):</strong> <a class="department-link" href="{program['dept_link']}">Department Website</a></p>
         <p><strong>Status:</strong> <span class="bold">{program['status']}</span></p>
