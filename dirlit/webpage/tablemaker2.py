@@ -16,7 +16,8 @@ period_mpa = astroinfo.iloc[:,5]
 period_zg = astroinfo.iloc[:,6]
 period_zr = astroinfo.iloc[:,7]
 period_zi = astroinfo.iloc[:,8]
-comments = astroinfo.iloc[:,16]
+comments_yasha = astroinfo.iloc[:,16]
+comments_alex = astroinfo.iloc[:,17]
 
 # Create a new BeautifulSoup object
 html = BeautifulSoup(features='html.parser')
@@ -86,7 +87,8 @@ for i in range(1,18):
     period_zi_td = html.new_tag('td', style='padding:10px')
     period_zr_td = html.new_tag('td', style='padding:10px')
     
-    comment_td = html.new_tag('td', colspan="4", style='padding:10px; text-align:center')
+    comment_td1 = html.new_tag('td', colspan="4", style='padding:10px; text-align:center')
+    comment_td2 = html.new_tag('td', colspan="4", style='padding:10px; text-align:center')
 
     coord_td.string = "J2000 Coordinates: "+coordinate[i-1]
     mag_td.string = "Magnitude range: "+mag_range[i-1]
@@ -99,7 +101,8 @@ for i in range(1,18):
     period_zi_td.string = "Period from ZTF-zi: "+period_zi[i-1]
     period_zr_td.string = "Period from ZTF-zr: "+period_zr[i-1]
     
-    comment_td.string = "Comment: "+comments[i-1]
+    comment_td1.string = "Comment (Yashodhan): "+comments_yasha[i-1]
+    comment_td2.string = "Comment (Dr. Zubareva): "+comments_alex[i-1]
 
     data_tr1.append(coord_td)
     data_tr1.append(mag_td)
@@ -112,7 +115,8 @@ for i in range(1,18):
     data_tr3.append(period_zi_td)
     data_tr3.append(period_zr_td)
     
-    comments_tr.append(comment_td)
+    comments_tr.append(comment_td1)
+    comments_tr.append(comment_td1)
 
     # Create the second tr in the 2 x 1 table
     sub_tr2 = html.new_tag('tr')
