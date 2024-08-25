@@ -165,7 +165,6 @@ html_template = """
     <div class="container">
         <div class="title-section">
             <h1>PhD Application Tracker</h1>
-            <p>Dear Referees, please find below the details for each program I'm applying to. You can see my progress, the required documents, and find the email addresses or links to submit your recommendations. You can click on the date to jump to the program in question.</p>
         </div>
 
         <!-- Calendar Section -->
