@@ -12,6 +12,18 @@
         "comments": "They have an AI/ML, radio astronomy and CMB focus. "
     },
     {
+        "name": "University of Western Australia",
+        "institutes": "International Centre for Radio Astronomy Research",
+        "deadline": "2024-08-30",
+        "email": "phd_uwa@icrar.org",
+        "ref_letter": "Automated email.",
+        "ad_link": "https://aas.org/jobregister/ad/1dcf2487",
+        "dept_link": "https://researchdegrees.uwa.edu.au/courses/895qq/doctor-of-philosophy",
+        "status": "Might skip this one",
+        "cover_cv_link": "https://www.overleaf.com/read/xnjrtwysxsrv#ba34ee",
+        "comments": "The projects are not my cup of tea, there is a low chance of selection."
+    },
+    {
         "name": "University of Chile",
         "institutes": "Department of Astronomy (DAS)",
         "deadline": "2024-08-31",
@@ -19,32 +31,20 @@
         "ref_letter": "They will send out emails.",
         "ad_link": "https://aas.org/jobregister/ad/df89283e",
         "dept_link": "http://www.das.uchile.cl/web_en/index.html",
-        "status": "Letter done, shall revise and submit on Tuesday.",
+        "status": "Submitted, but did not receive a confirmation via email, sent a query about it.",
         "cover_cv_link": "https://www.overleaf.com/read/hpwcctpxfrpt#502def",
-        "comments": "They posted an advertisement very close to the deadline, but I am glad that they did. I have a strong interest in this place. They will send emails to refeeres regarding reference letters. "
+        "comments": "Hope I get it."
     },
     {
         "name": "Swinburne University of Technology (Melbourne, Australia)",
         "institutes": "Center for Astrophysics and Supercomputing",
-        "deadline": "2024-08-30",
+        "deadline": "2024-09-03",
         "email": "rshannon@swin.edu.au",
-        "ref_letter": "Will update soon (tomorrow)",
+        "ref_letter": "They need the referees to fill in a form to rshannon@swin.edu.au",
         "ad_link": "https://aas.org/jobregister/ad/d79971b7",
         "dept_link": "http://astronomy.swin.edu.au/study/PhDEoI/",
-        "status": "Yet to start writing.",
+        "status": "Working on it.",
         "cover_cv_link": "https://www.overleaf.com/read/mdtnbyshckgd#f8e1ed",
-        "comments": "No comments yet"
-    },
-    {
-        "name": "University of Western Australia",
-        "institutes": "International Centre for Radio Astronomy Research",
-        "deadline": "2024-08-30",
-        "email": "phd_uwa@icrar.org",
-        "ref_letter": "Will update soon (tomorrow)",
-        "ad_link": "https://aas.org/jobregister/ad/1dcf2487",
-        "dept_link": "https://researchdegrees.uwa.edu.au/courses/895qq/doctor-of-philosophy",
-        "status": "Yet to start writing.",
-        "cover_cv_link": "https://www.overleaf.com/read/xnjrtwysxsrv#ba34ee",
-        "comments": "I need to provide referee email addresses to them, they may reach out (looks like it prima facie, shall write to you if otherwise)."
+        "comments": "First they want us to <i>express interest</i>, if they think that there is a chance of getting a scholarship, they will allow us to apply. I am showing interest in an interesting project in changing fundamental constants and probing the accelerated expansion of the universe."
     }
 ]
