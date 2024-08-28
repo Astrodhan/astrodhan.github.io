@@ -165,6 +165,7 @@ html_template = """
     <div class="container">
         <div class="title-section">
             <h1>PhD Application Tracker</h1>
+            <h3>Note: Deadline dates in the calendar are clickable. </h3>
         </div>
 
         <!-- Calendar Section -->

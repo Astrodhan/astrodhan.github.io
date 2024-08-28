@@ -19,32 +19,68 @@
         "ref_letter": "Automated email.",
         "ad_link": "https://aas.org/jobregister/ad/1dcf2487",
         "dept_link": "https://researchdegrees.uwa.edu.au/courses/895qq/doctor-of-philosophy",
-        "status": "Might skip this one",
+        "status": "Probably skipping this one.",
         "cover_cv_link": "https://www.overleaf.com/read/xnjrtwysxsrv#ba34ee",
         "comments": "The projects are not my cup of tea, there is a low chance of selection."
-    },
-    {
-        "name": "University of Chile",
-        "institutes": "Department of Astronomy (DAS)",
-        "deadline": "2024-08-31",
-        "email": "postgrado@das.uchile.cl",
-        "ref_letter": "They will send out emails.",
-        "ad_link": "https://aas.org/jobregister/ad/df89283e",
-        "dept_link": "http://www.das.uchile.cl/web_en/index.html",
-        "status": "Submitted, but did not receive a confirmation via email, sent a query about it.",
-        "cover_cv_link": "https://www.overleaf.com/read/hpwcctpxfrpt#502def",
-        "comments": "Hope I get it."
     },
     {
         "name": "Swinburne University of Technology (Melbourne, Australia)",
         "institutes": "Center for Astrophysics and Supercomputing",
         "deadline": "2024-09-03",
         "email": "rshannon@swin.edu.au",
-        "ref_letter": "They need the referees to fill in a form to rshannon@swin.edu.au",
+        "ref_letter": "They need the referees to fill in a form and send it to rshannon@swin.edu.au",
         "ad_link": "https://aas.org/jobregister/ad/d79971b7",
         "dept_link": "http://astronomy.swin.edu.au/study/PhDEoI/",
-        "status": "Working on it.",
+        "status": "Submitted.",
         "cover_cv_link": "https://www.overleaf.com/read/mdtnbyshckgd#f8e1ed",
-        "comments": "First they want us to <i>express interest</i>, if they think that there is a chance of getting a scholarship, they will allow us to apply. I am showing interest in an interesting project in changing fundamental constants and probing the accelerated expansion of the universe."
+        "comments": "First they want us to <i>express interest</i>, if they think that there is a chance of getting a scholarship, they will allow us to apply. I am showing interest in an interesting project in changing fundamental constants and probing the accelerated expansion of the universe. Emailed the professor (Michael Murphy) about it."
+    },    
+    {
+        "name": "University of Chile",
+        "institutes": "Department of Astronomy (DAS)",
+        "deadline": "2024-08-31",
+        "email": "postgrado@das.uchile.cl",
+        "ref_letter": "Send to: mojeda@das.uchile.cl",
+        "ad_link": "https://aas.org/jobregister/ad/df89283e",
+        "dept_link": "http://www.das.uchile.cl/web_en/index.html",
+        "status": "Submitted.",
+        "cover_cv_link": "https://www.overleaf.com/read/hpwcctpxfrpt#502def",
+        "comments": "Hope I get it."
+    },
+    {
+        "name": "Universidad Diego Portales (Chile)",
+        "institutes": "Instituto de Estudios Astrofísicos",
+        "deadline": "2024-09-08",
+        "email": "astrophd@mail.udp.cl",
+        "ref_letter": "Send to: astrophd@mail.udp.cl",
+        "ad_link": "https://aas.org/jobregister/ad/5bd99650",
+        "dept_link": "https://astronomia.udp.cl/en/teaching/phd-astrophysics/",
+        "status": "Yet to start working on it.",
+        "cover_cv_link": "https://www.overleaf.com/read/vxrvdxkxchpm#76c5b7",
+        "comments": "None yet."
+    },
+    {
+        "name": "Universidad Andrés Bello (Chile)",
+        "institutes": "Institute of Astrophysics",
+        "deadline": "2024-09-13",
+        "email": "astrodoc@unab.cl",
+        "ref_letter": "Send to: astrodoc@unab.cl",
+        "ad_link": "https://aas.org/jobregister/ad/8ee6eb39",
+        "dept_link": "https://investigacion.unab.cl/doctorados-eng/astrophysics/",
+        "status": "Yet to start working on it.",
+        "cover_cv_link": "https://www.overleaf.com/read/kqxvsgjgtqnd#3cc120",
+        "comments": "None yet."
+    },
+    {
+        "name": "Laboratory for Innovation in Opto-Mechanics (LIOM – ERA Chair) (Spain)",
+        "institutes": "Instituto de Astrofísica de Canarias",
+        "deadline": "2024-09-16",
+        "email": "secens@iac.es",
+        "ref_letter": "Automated email.",
+        "ad_link": "https://aas.org/jobregister/ad/1dc86b1d",
+        "dept_link": "https://iac.sede.gob.es/procedimientos/portada/ida/0/idp/424/language/en",
+        "status": "Yet to start working on it.",
+        "cover_cv_link": "https://www.overleaf.com/read/dywssdsydhsw#8b8cd7",
+        "comments": "Too many hoops to jump through here. Might be ineligible due to not having a B1 certificate in Spanish (yet)."
     }
 ]
