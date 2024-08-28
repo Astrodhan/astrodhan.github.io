@@ -24,18 +24,6 @@
         "comments": "The projects are not my cup of tea, there is a low chance of selection."
     },
     {
-        "name": "Swinburne University of Technology (Melbourne, Australia)",
-        "institutes": "Center for Astrophysics and Supercomputing",
-        "deadline": "2024-09-03",
-        "email": "rshannon@swin.edu.au",
-        "ref_letter": "They need the referees to fill in a form and send it to rshannon@swin.edu.au",
-        "ad_link": "https://aas.org/jobregister/ad/d79971b7",
-        "dept_link": "http://astronomy.swin.edu.au/study/PhDEoI/",
-        "status": "Submitted.",
-        "cover_cv_link": "https://www.overleaf.com/read/mdtnbyshckgd#f8e1ed",
-        "comments": "First they want us to <i>express interest</i>, if they think that there is a chance of getting a scholarship, they will allow us to apply. I am showing interest in an interesting project in changing fundamental constants and probing the accelerated expansion of the universe. Emailed the professor (Michael Murphy) about it."
-    },    
-    {
         "name": "University of Chile",
         "institutes": "Department of Astronomy (DAS)",
         "deadline": "2024-08-31",
@@ -47,6 +35,18 @@
         "cover_cv_link": "https://www.overleaf.com/read/hpwcctpxfrpt#502def",
         "comments": "Hope I get it."
     },
+    {
+        "name": "Swinburne University of Technology (Melbourne, Australia)",
+        "institutes": "Center for Astrophysics and Supercomputing",
+        "deadline": "2024-09-03",
+        "email": "rshannon@swin.edu.au",
+        "ref_letter": "They need the referees to fill in a form and send it to rshannon@swin.edu.au",
+        "ad_link": "https://aas.org/jobregister/ad/d79971b7",
+        "dept_link": "http://astronomy.swin.edu.au/study/PhDEoI/",
+        "status": "Submitted.",
+        "cover_cv_link": "https://www.overleaf.com/read/mdtnbyshckgd#f8e1ed",
+        "comments": "First they want us to <i>express interest</i>, if they think that there is a chance of getting a scholarship, they will allow us to apply. I am showing interest in an interesting project in changing fundamental constants and probing the accelerated expansion of the universe. Emailed the professor (Michael Murphy) about it."
+    },    
     {
         "name": "Universidad Diego Portales (Chile)",
         "institutes": "Instituto de Estudios Astrofísicos",
