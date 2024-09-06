@@ -7,7 +7,7 @@
         "ref_letter": "postgraduate@sun.ac.za",
         "ad_link": "https://aas.org/jobregister/ad/8ed44eff",
         "dept_link": "https://www.rug.nl/research/kapteyn/vacatures/phd-positions",
-        "status": "Applied, waiting to hear from them.",
+        "status": "Submitted. They had written 26th August as the start of interviews, only 20 days after the deadline. I did not receive any email from them and they aren't responding to queries (neither uni HR nor program coordinator).",
         "cover_cv_link": "https://www.overleaf.com/read/hfkgjngmjfbn#4b3b3e",
         "comments": "They have an AI/ML, radio astronomy and CMB focus. "
     },
@@ -43,7 +43,7 @@
         "ref_letter": "Send to: astrophd@mail.udp.cl",
         "ad_link": "https://aas.org/jobregister/ad/5bd99650",
         "dept_link": "https://astronomia.udp.cl/en/teaching/phd-astrophysics/",
-        "status": "Submitted.",
+        "status": "Submitted. Two letters pending, one sent.",
         "cover_cv_link": "https://www.overleaf.com/read/vxrvdxkxchpm#76c5b7",
         "comments": "New department, new program, private university. They say that they <i>prefer</i> if we have <i>some</i> experience in research, yet I believe I was not shortlisted last time. Let's hope for the best, I put in a lot of effort in the application."
     },
@@ -55,7 +55,7 @@
         "ref_letter": "Send to: astrodoc@unab.cl",
         "ad_link": "https://aas.org/jobregister/ad/8ee6eb39",
         "dept_link": "https://investigacion.unab.cl/doctorados-eng/astrophysics/",
-        "status": "First draft done.",
+        "status": "Submitted.",
         "cover_cv_link": "https://www.overleaf.com/read/kqxvsgjgtqnd#3cc120",
         "comments": "Energielos department, private university. 90% Spanish content and faculty/students."
     },
@@ -70,5 +70,17 @@
         "status": "Yet to start working on it.",
         "cover_cv_link": "https://www.overleaf.com/read/dywssdsydhsw#8b8cd7",
         "comments": "Too many hoops to jump through here. Might be ineligible due to not having a B1 certificate in Spanish (yet)."
+    },
+    {
+        "name": "University of Antofagasta (Chile)",
+        "institutes": "Centro de Astronomía",
+        "deadline": "2024-10-07",
+        "email": "anay.herrera@uantof.cl",
+        "ref_letter": "Send to: astro.doctorado@uantof.cl",
+        "ad_link": "https://www.astro.uantof.cl/educacion/doctorate-in-astrophysics-and-astroinformatics/",
+        "dept_link": "https://www.astro.uantof.cl/",
+        "status": "Yet to start working on it.",
+        "cover_cv_link": "https://www.overleaf.com/read/kvspqrnvcdmq#73f6be",
+        "comments": "AI/ML in astronomy focus."
     }
 ]
