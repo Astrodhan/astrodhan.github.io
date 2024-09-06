@@ -77,7 +77,7 @@ def generate_calendar(days):
 
 
 # Generate the calendar HTML
-calendar_html = generate_calendar(30)
+calendar_html = generate_calendar(60)
 
 # HTML template with placeholders
 html_template = """
@@ -170,7 +170,7 @@ html_template = """
 
         <!-- Calendar Section -->
         <div class="calendar">
-            <h2>Upcoming 30 Days</h2>
+            <h2>Upcoming 60 Days</h2>
             {calendar_html}
         </div>
 
