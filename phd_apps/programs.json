@@ -43,7 +43,7 @@
         "ref_letter": "Send to: astrophd@mail.udp.cl",
         "ad_link": "https://aas.org/jobregister/ad/5bd99650",
         "dept_link": "https://astronomia.udp.cl/en/teaching/phd-astrophysics/",
-        "status": "Submitted. Two letters pending, one sent.",
+        "status": "Submitted.",
         "cover_cv_link": "https://www.overleaf.com/read/vxrvdxkxchpm#76c5b7",
         "comments": "New department, new program, private university. They say that they <i>prefer</i> if we have <i>some</i> experience in research, yet I believe I was not shortlisted last time. Let's hope for the best, I put in a lot of effort in the application."
     },
@@ -60,16 +60,16 @@
         "comments": "Private university. 90% Spanish content and faculty/students."
     },
     {
-        "name": "Laboratory for Innovation in Opto-Mechanics (LIOM – ERA Chair) (Spain)",
-        "institutes": "Instituto de Astrofísica de Canarias",
-        "deadline": "2024-09-16",
-        "email": "secens@iac.es",
-        "ref_letter": "Automated email.",
-        "ad_link": "https://aas.org/jobregister/ad/1dc86b1d",
-        "dept_link": "https://iac.sede.gob.es/procedimientos/portada/ida/0/idp/424/language/en",
-        "status": "Applicationr ready, but server down",
-        "cover_cv_link": "https://www.overleaf.com/read/dywssdsydhsw#8b8cd7",
-        "comments": "Island observatories. No cover letter asked."
+        "name": "University of Atacama (Chile)",
+        "institutes": "Instituto De Astronomia y Ciencias Planetarias",
+        "deadline": "2024-09-22",
+        "email": "inct@uda.cl",
+        "ref_letter": "Send to: inct@uda.cl",
+        "ad_link": "https://inct.uda.cl/index.php/en/education/",
+        "dept_link": "https://inct.uda.cl/index.php/en/research/",
+        "status": "Yet to start working on it.",
+        "cover_cv_link": "https://www.overleaf.com/read/qrnkqmkrbdyp#df9c56",
+        "comments": "Out in the desert in atacama desert darkness"
     },
     {
         "name": "University of Antofagasta (Chile)",
@@ -83,4 +83,4 @@
         "cover_cv_link": "https://www.overleaf.com/read/kvspqrnvcdmq#73f6be",
         "comments": "AI/ML in astronomy focus."
     }
-]
+   ]
