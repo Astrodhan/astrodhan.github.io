@@ -2,7 +2,7 @@ Antipin, S., I. Becker, A. A. Belinski, D. M. Kolesnikova, K. Pichara, N. N.Samu
 
 Samus, N. and O. V. Durlevich (2016). GCVS variability types. URL: http://www.sai.msu.su/gcvs/gcvs/iii/vartype.txt
 
-Samus N.N., Kazarovets E.V., Durlevich O.V., Kireeva N.N., Pastukhova E.N., General Catalogue of Variable Stars: Version GCVS 5.1, Astronomy Reports, 2017, vol. 61, No. 1, pp. 80-88 {2017ARep...61...80S} URL: http://www.sai.msu.su/gcvs/gcvs/gcvs5/htm/
+Samus N.N., Kazarovets E.V., Durlevich O.V., Kireeva N.N., Pastukhova E.N. (2017). General Catalogue of Variable Stars: Version GCVS 5.1, Astronomy Reports, 2017, vol. 61, No. 1, pp. 80-88 {2017ARep...61...80S} URL: http://www.sai.msu.su/gcvs/gcvs/gcvs5/htm/
 
 Samus, N. N., L. Sat, S. Vereshchagin, and A. Zharova (2005). Moscow astronomical plate archives: Contents, digitisation, current and possible applications. http://www.sai.msu.su/gcvs/digit/preprint.htm
 
