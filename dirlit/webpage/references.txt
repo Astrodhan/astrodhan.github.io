@@ -1,0 +1,20 @@
+Antipin, S., I. Becker, A. A. Belinski, D. M. Kolesnikova, K. Pichara, N. N.Samus, K. V. Sokolovsky, A. V. Zharova, and A. M. Zubareva (2018). New variable stars from the photographic archive:semi-automated discoveries, attempts of automatic classification, and the new field 104 her. Research in Astronomy and Astrophysics 2018 Vol. 18 No. 8, 92(12pp) doi: 10.1088/1674–4527/18/8/92
+
+Samus, N. and O. V. Durlevich (2016). GCVS variability types. URL: http://www.sai.msu.su/gcvs/gcvs/iii/vartype.txt
+
+Samus N.N., Kazarovets E.V., Durlevich O.V., Kireeva N.N., Pastukhova E.N., General Catalogue of Variable Stars: Version GCVS 5.1, Astronomy Reports, 2017, vol. 61, No. 1, pp. 80-88 {2017ARep...61...80S} URL: http://www.sai.msu.su/gcvs/gcvs/gcvs5/htm/
+
+Samus, N. N., L. Sat, S. Vereshchagin, and A. Zharova (2005). Moscow astronomical plate archives: Contents, digitisation, current and possible applications. http://www.sai.msu.su/gcvs/digit/preprint.htm
+
+Sokolovsky, K. V. and A. A. Lebedev (2018). Vast: A variability search toolkit. doi:10.1016/j.ascom.2017.12.001.
+
+Bonnarel F. , Fernique P. , Bienaymé O.,Egret D. , Genova F., Louys M., Ochsenbein F. , Wenger M., Bartlett J. G. (2000)  The ALADIN interactive sky atlas. A reference tool for identification of astronomical sources.  Astronomy and Astrophysics Supplement, v.143, p.33-40. doi:10.1051/aas:2000331
+
+Malanchev Konstantin, Kornilov Matwey V., Pruzhinskaya Maria V., Ishida Emille E. O., Aleo Patrick D., Korolev Vladimir S., Lavrukhina Anastasia, Russeil Etienne, Sreejith Sreevarsha, Volnova Alina A., Voloshina Anastasiya, Krone-Martins Alberto (2023) The SNAD Viewer: Everything You Want to Know about Your Favorite ZTF Object.  Publications of the Astronomical Society of the Pacific, Volume 135, Issue 1044, id.024503, 18 pp. doi:10.1088/1538-3873/acb292 
+
+Watson, C. L. , Henden, A. A. , Price, A. (2006) The International Variable Star Index (VSX). Bibcode: 2006SASS...25...47W
+
+Eric C. Bellm et al (2019) The Zwicky Transient Facility: System Overview, Performance, and First Results. 2019 PASP 131 018002 doi:10.1088/1538-3873/aaecbe
+
+
+
