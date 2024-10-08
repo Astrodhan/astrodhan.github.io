@@ -4,65 +4,323 @@
 using Markdown
 using InteractiveUtils
 
-# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
-macro bind(def, element)
-    quote
-        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
-        local el = $(esc(element))
-        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
-        el
-    end
+# ╔═╡ a622ee70-815b-11ef-3728-7b3ed1807d09
+using CSV, DataFrames, Plots, PlutoUI, LaTeXStrings, LinearAlgebra, Statistics
+
+# ╔═╡ c98d15f0-8586-4e10-96c6-9dc41d857589
+html"""
+<center><h1>The M - σ relation</h1></center>
+"""
+
+# ╔═╡ 4b32f9bc-fa07-48fb-95ad-b7eaf76b4f8f
+md"""
+##### The M - σ relation is a correlation between the (radial) velocity dispersion of the stars in the galactic bulge with the mass of the supermassive black hole at the center of the said galaxy.
+
+In this page, we use a dataset containing velocity dispersions and the central supermassive black hole's masses to calculate this relation for ourselves.
+In particular, we use the same model as used by previous authors and calculate our own parameters using linear regression.
+
+"""
+
+# ╔═╡ c8ac7694-e899-4861-808e-953d6415ff7d
+data = CSV.read("M_sigma.csv", DataFrame)
+
+# ╔═╡ 5feb0f4c-f910-476c-bccb-ea994e9b3201
+md"""
+Note that this data is claimed to have come from a paper cited as 'Harris et al (2013)', but since the author has been unable to locate it, this data is better treated as a dummy data. Link to a similar paper is in the description.
+"""
+
+# ╔═╡ f042a4bf-b91c-4c58-828f-18d343359ade
+md"""
+In this data we have the logarithm to the base 10 of the mass of the supermassive black hole in units of solar masses and the logarithm to the base 10 of the standard deviation of velocities of stars in the bulge in units of 200 kmps.
+"""
+
+# ╔═╡ 42d8ad04-dc6b-41bf-a1da-efbbb5122d6b
+html"""
+<center><h2>Plotting the data</h2></center>
+"""
+
+# ╔═╡ 31b4bc0d-5ae2-484b-83a8-a342b24b9e93
+html"""
+<center><h3>Let's fit a line through this plot:</h3></center>
+"""
+
+# ╔═╡ e17f4a4d-3483-4e15-96b0-3badd8d63e99
+html"""
+<center><h4>We have: </h4>
+<br>
+X  : Matrix containing the independent variable(s)<br>
+Y  : Matrix containing the dependent variable(s)<br>
+β : Matrix containing linear coefficients such that:
+<br><br>
+
+<center><h5><i>Y = βX</i></h5></center>
+</center>
+<br>
+"""
+
+# ╔═╡ 2ad0fa98-d5d0-460a-9929-3f0908c527a1
+html"""
+<center><h5>We plan to minimise the least squares error betweeen a straight line in our space and the data-points.</h5></center>
+<br>
+When we square the difference between points on a hypothetical line and real y values and then differentiate it with respect to the parameters of the hypothetical line, we arrive at the following condition for which squared difference is at its minimum:
+<br><br>
+<center><h5><i>β = (X<sup>T</sup>X)<sup>-1</sup>X<sup>T</sup>Y</i></h5></center>
+<br><br>
+We are calling our β as αβ to better represent the two values it contains. <br>
+<br>
+<h5>In Julia, it is calculated in one swift stroke as:</h5>
+"""
+
+# ╔═╡ 143c3fd6-fea9-4698-b19f-8ae9148b9b87
+html"""
+<center><h4>Let's plot this fit now:</h4></center>
+"""
+
+# ╔═╡ 716fe00d-bc1b-4b7b-89b5-b8ca1e1a13cf
+html"""
+<center><h4>It looks good. <br> But we did not take the errors into account.<br>Let's consider the error in Y.</h4></center>
+"""
+
+# ╔═╡ d636847e-620e-40eb-a7f1-2254176bdc98
+html"""
+<center>
+Now our plan is to weigh the squared differences in proportion to how accurate the measurement is. <br> 
+The smaller the error, the more accurate the measurement.<br>
+So we shall invert it, and square it as we are minimising the sum of squared differences.<br><br>
+</center>
+These are the weights:
+"""
+
+# ╔═╡ 2240b565-940f-436d-aff7-07135fbdc0de
+html"""
+Let us put those in a diagonal matrix so that we can multiply it element by element to the squared differences matrix.<br>
+So:
+"""
+
+# ╔═╡ 254e631d-a576-4eba-be90-0dd971263d7c
+html"""
+<center>
+<h5>
+This time we have the W matrix in our condition:
+</h5>
+</center>
+<br><br>
+<center><h5><i>β = (X<sup>T</sup>WX)<sup>-1</sup>X<sup>T</sup>WY</i></h5></center>
+<br><br>
+
+It is again calculated swiftly as:
+"""
+
+# ╔═╡ faadeca7-ea8f-4f00-ab3e-a23ad659012f
+html"""
+<center><h4>Let's plot this new fit now:</h4></center>
+"""
+
+# ╔═╡ 1b8da048-df8a-4eb7-a973-15c14e8323dd
+html"""
+<center><h4>It looks different. <br> But we did not take the x-error into account.<br>Let's consider the error in X and Y together.</h4></center>
+"""
+
+# ╔═╡ 326563f7-495c-4ae9-ba86-eb8371bfb82e
+html"""
+<center>
+This time we add in the denominator the error from X in same units as Y. This means we muliply with the slope.<br>
+But wait! We don't know the slope, that is the whole point of the exercise.<br>
+We shall use the slope from the previous calculation as a guess and then update it after calculating. After a few trials we should converge on the right slope from this method.
+<br><br>
+</center>
+These are the weights:
+"""
+
+# ╔═╡ a1ff6a25-fdea-46fe-a8d7-bc66db7496b7
+html"""
+Doing the Julia magic once again, using the same formula as before:
+"""
+
+# ╔═╡ 20da3c6d-0c0b-4b04-951a-17e53986ed95
+html"""
+<center><h4>Let's plot this final fit now:</h4></center>
+"""
+
+# ╔═╡ 99913d87-432d-405e-99bc-98f8eaeefaba
+html"""
+<center><h4>Comparing the three fits:</h4></center>
+"""
+
+# ╔═╡ ac93804b-c12b-4957-b492-f2b22838e46f
+html"""
+<center><h4>We will finalise the fit with both errors taken into account as our final fit. <br><br>Let's now calculate the scatter around this fit:</h4></center>
+"""
+
+# ╔═╡ 39588ce9-776c-4949-bfb0-cb9a53fefd45
+html"""
+We find out the (vertical) residuals and find their standard deviation. By our design, the mean should be close to zero.
+"""
+
+# ╔═╡ aa6d6452-ad27-4575-9765-747b975997d6
+md"""
+The standard deviation is:
+"""
+
+# ╔═╡ 59116a1b-eabf-4302-aa66-36df1aeea8a0
+md"""
+The mean is:
+"""
+
+# ╔═╡ d48bc205-8778-4152-8587-ba2f43f1d02f
+html"""
+<center><h2>Thus we calculated the M - σ relation to be:</h2></center>
+"""
+
+# ╔═╡ e70a4a63-127d-4c2e-9dab-1e1e82da7386
+L"log(\frac{M_⋆}{M_☉}) = 8.371 + 4.524 \times log(\frac{σ}{σ_0})+ 𝒩(0,0.391^2) "
+
+# ╔═╡ b3cfb448-bed2-4c0b-be7d-ca308ccf5951
+html"""
+<center>
+Where: <br>
+M<sub>☉</sub> = 2 x 10<sup>30</sup> kg (Mass of the Sun)<br>
+σ<sub>0</sub> = 2 x 10<sup>5</sup> m/s (200 km/s)
+</center>
+"""
+
+# ╔═╡ 8274fb7f-46b0-40f8-85c9-7554a3ed61a2
+md"""
+## In other words,
+"""
+
+# ╔═╡ 1687ceac-45ad-4e0c-8ff2-2d2c1be5cfc7
+L"M_⋆ = 2.349 \times 10^8 M_☉ (\frac{σ_0}{200 \ kms^{-1}})^{4.524} "
+
+# ╔═╡ b9690ae8-da84-4ea0-adba-d220c98daec8
+html"""
+Here is Gebhardt et al (2024)(draft) which calculates (8.079, 3.75):<br>
+<iframe src = "https://arxiv.org/pdf/astro-ph/0006289" width="100%" height="500px"></iframe>
+"""
+
+# ╔═╡ 8b400c5a-95a6-44f9-8ea9-3377548a1736
+md"""
+## Code cells: 
+
+These cells are important to the code, but not to the presentation so they have been moved down here.
+"""
+
+# ╔═╡ 2b15bba8-bcd9-4361-883b-0f8bef0f4364
+begin
+	logσ = data.logSigma
+	err_logσ = data.err_logSigma
+	logM = data.logM
+	err_logM = data.err_logM
+	galaxy_types = data.Type
 end
 
-# ╔═╡ 08a182e1-8366-4b08-bfdd-2a9826befcd2
-using PlutoUI
+# ╔═╡ ece358df-c4bb-4099-b2cf-f8c43f2489b1
+begin
+	# Defining an array full of ones, this is for the constant term
+	ones = fill(1.0, (length(logM),)) 
+	# Defining the X as a concatenation of ones and the main independent variable: logσ
+	X = hcat(ones, logσ)
+	# Y is logM
+	Y = logM
+end
 
-# ╔═╡ 919c3c1c-d89f-4ddf-970b-c7ef04f2e24f
-using PlotThemes
+# ╔═╡ 1df19403-2433-4867-adf2-68f778ea465b
+αβ = inv(X'X)X'Y
 
-# ╔═╡ 44221ff5-fa5e-40a6-ab86-adec81929ae8
+# ╔═╡ 8cab1633-e238-418a-93be-97b104bc88fc
+y_error_weight = (1 ./ err_logM) .^ 2
 
-using Plots, Measures
+# ╔═╡ 2720bf2f-b371-4d02-9f1f-eebf47bafe3c
+W = Diagonal(y_error_weight)
 
+# ╔═╡ ed8547cc-385f-46b3-ab34-ef00e2b1219b
+αβ_2 =  inv(X'W*X)X'W*Y
 
-# ╔═╡ 7034449a-0a5a-4fc5-bd0a-6fe6f122ddd8
-html"""
-<center>
-<h1>Awesome Binary System astro-tool</h1>
-</center>
-"""
+# ╔═╡ 87a07080-efe0-45ec-9662-8b0a277241f9
+xy_error_weight = 1 ./ (err_logM .^ 2 + (err_logσ * 4.52) .^ 2)
 
-# ╔═╡ a9e0dae6-3e81-11ef-2237-e5f5266ba165
-html"
-<h1>
-<center>
-On this page, we will simulate the orbit of a gravitional binary system.<br>
-We can have 🌟 and 🌟, 🌟 and 🌏 or 🌏 and 🌍.
-</h1>
-</center>
-<br>
-<center>
-Note that you are viewing a static form of this notebook. To play with it, select the <i>Edit or Run this notebook</i> option on the top right of this page and select the option most suitable for you. 
-</center>
-<br>
-"
+# ╔═╡ e56cae68-a7e0-46ee-b518-2875f770673b
+galaxy_type = galaxy_types .* " Galaxy type"
 
-# ╔═╡ 5a87c818-cda3-432e-8c92-0d7062641536
-html"""
-<center>
-<h4>Let's put the parameters in!</h4>
-</center>
-"""
+# ╔═╡ 6b1a3512-077d-4014-a8d6-e3f473d8df92
+begin
+	plot(logσ,logM, xerr=err_logσ, yerr=err_logM, group = galaxy_type, seriestype=:scatter, title="M-σ plot", xlabel=L"log(\frac{σ}{σ_0})", ylabel=L"log(\frac{M}{M_{Sun}})", size=(800,500), legend=true, margin=5Plots.mm)
+end
 
-# ╔═╡ f5023337-2a14-4f87-9339-1652d69384a2
-html""" <center><h3>Recognise the famous binary star set as default?</h3></center>"""
+# ╔═╡ 9baa0eb3-7f4c-4d39-94bc-3914be3549c6
+begin
+	x_fit_simple = minimum(logσ):0.02:maximum(logσ)+0.1
+	y_fit_simple = αβ[1] .+ αβ[2] .* x_fit_simple
+end
 
-# ╔═╡ b2bb5a20-15ab-41d8-b216-427a9ff4d1ef
+# ╔═╡ b8ba1849-8b80-4ff0-ab79-7a32669c3f01
+begin
+	plot(logσ,logM, xerr=err_logσ, yerr=err_logM, group = galaxy_type, seriestype=:scatter, title="M-σ relation, simple fit", xlabel=L"log(\frac{σ}{σ_0})", ylabel=L"log(\frac{M}{M_{Sun}})", size=(800,500), legend=true, margin=5Plots.mm)
+
+	plot!(x_fit_simple, y_fit_simple, label = "simple fit", linecolor=:red, linewidth=2.5)
+end
+
+# ╔═╡ 5a0c56d6-c712-4749-944f-40d2556a9d07
+begin
+	x_fit_with_err = minimum(logσ):0.02:maximum(logσ)+0.1
+	y_fit_with_err = αβ_2[1] .+ αβ_2[2] .* x_fit_simple
+end
+
+# ╔═╡ 8925c79a-d454-46c9-a01c-79b994465b1d
+begin
+	plot(logσ,logM, xerr=err_logσ, yerr=err_logM, group = galaxy_type, seriestype=:scatter, title="M-σ relation, fit with y-error accounted for", xlabel=L"log(\frac{σ}{σ_0})", ylabel=L"log(\frac{M}{M_{Sun}})", size=(800,500), legend=true, margin=5Plots.mm)
+
+	plot!(x_fit_with_err, y_fit_with_err, label = "New fit", linecolor=:blue, linewidth=2.5)
+end
+
+# ╔═╡ 4b84a61e-47a8-4e83-8320-01dcf3d99ee5
+W2 = Diagonal(xy_error_weight)
+
+# ╔═╡ 931b2932-e71b-469b-a3e2-2ff3e5fd9ef9
+αβ_3 =  inv(X'W2*X)X'W2*Y
+
+# ╔═╡ c2b55734-37d4-4a79-a8d6-b7161ce26c5d
+fit_y = αβ_3[1] .+ (αβ_3[2] .* logσ)
+
+# ╔═╡ 021a0570-3d96-4616-9665-c3f2115c6dc3
+residuals = fit_y .- logM
+
+# ╔═╡ 6a587048-1233-4736-8059-13af77ee43c8
+ω = std(residuals)
+
+# ╔═╡ 505f0ea1-8780-49fd-93ff-a8191e7cc69e
+μ = mean(residuals)
+
+# ╔═╡ d5042724-8841-4639-a3af-b33c267aac4b
 md"""
-## Beneath are all the code cells, if you are interested in checking them out.
+###### Our values ($(round(αβ_3[1], digits=3)) , $(round(αβ_3[2], digits=3))) are in between the values (8.491,4) found by Merritt (1999) and (8.279, 5.1) by McConnell et al (2011). 
 """
 
-# ╔═╡ 6dd71405-febd-44a4-ad17-066a009ecbca
+# ╔═╡ 1e5e0043-67e4-4a03-a2bf-ecc9006116d2
+begin
+	x_fit_with_2err = minimum(logσ):0.02:maximum(logσ)+0.1
+	y_fit_with_2err = αβ_3[1] .+ αβ_3[2] .* x_fit_simple
+end
+
+# ╔═╡ 560de6b1-f491-42bd-a7b0-8ec88e11a355
+begin
+	plot(logσ,logM, xerr=err_logσ, yerr=err_logM, group = galaxy_type, seriestype=:scatter, title="M-σ relation, fit with x and y error accounted for", xlabel=L"log(\frac{σ}{σ_0})", ylabel=L"log(\frac{M}{M_{Sun}})", size=(800,500), legend=true, margin=5Plots.mm)
+
+	plot!(x_fit_with_2err, y_fit_with_2err, label = "Improved fit", linecolor=:green, linewidth=2.5)
+end
+
+# ╔═╡ 1cb01538-90eb-43e6-aa99-07a508d248f9
+begin
+	plot(logσ,logM, xerr=err_logσ, yerr=err_logM, group = galaxy_type, seriestype=:scatter, title="M-σ relation, fits compared", xlabel=L"log(\frac{σ}{σ_0})", ylabel=L"log(\frac{M}{M_{Sun}})", size=(800,500), margin=5Plots.mm)
+
+	plot!(x_fit_simple, y_fit_simple, linewidth=2.5, label = "Simple fit", linecolor=:red)
+	
+	plot!(x_fit_with_err, y_fit_with_err, linewidth=2.5, label = "Fit considering only y error", linecolor=:blue)
+	
+	plot!(x_fit_with_2err, y_fit_with_2err, linewidth=2.5, label = "Fit considering x and y errors", linecolor=:green)
+end
+
+# ╔═╡ 4eefc911-7488-4a63-8040-347a33abb170
 html"""
 <style>
 body{
@@ -74,7 +332,6 @@ background-position: center;
 --main-bg-color: #fffec4;
 --code-background: #fffec4;
 }
-
 .c12{
 color:black;
 }
@@ -137,557 +394,22 @@ table{
 
 """
 
-# ╔═╡ e46f99ed-2156-4935-be60-c8c2fa32732f
-# ╠═╡ disabled = true
-#=╠═╡
-using Plots
-  ╠═╡ =#
-
-# ╔═╡ 79473dc0-b4e9-429e-a721-62ddaa2f5b34
-
-
-# ╔═╡ 127c4717-9c1d-4051-ac91-bff955c16a10
-function InputFields(name::String)
-	fields = Dict(["m1"=>html"""
-		<input type=number min=0.1 max=100 value=3.17 style='width: 70%;'>
-		""","m2"=>html"""
-		<input type=number min=0.1 max=100 value=0.70 style='width: 70%;'>
-		""","r1"=>html"""
-		<input type=number min=0.1 max=1000 value=2.73 style='width: 70%;'>
-		""","r2"=>html"""
-		<input type=number min=0.1 max=1000 value=3.48 style='width: 70%;'>
-		""","l1"=>html"""
-		<input type=number min=-30 max=20 value=-0.07 style='width: 70%;'>
-		""","l2"=>html"""
-		<input type=number min=-30 max=20 value=2.9 style='width: 70%;'>
-		""","p"=>html"""
-		<input type=number min=0.01 max=1000 value=2.8673 style='width: 80%;'>
-		""","sp"=>html"""
-		<input type=number min=0.01 max=1000 value=10 style='width: 50%;'>
-		""","e"=>html"""
-		<input type=number min=0 max=0.99 value=0 style='width: 50%;'>
-		""","a1"=>html"""
-		<input type=number min=-360 max=360 value=-8.7 style='width: 100%;'>
-		""","a2"=>html"""
-		<input type=number min=-360 max=360 value=43.43 style='width: 50%;'>
-		""","a"=>html"""
-		<input type=number min=-360 max=360 value=0 style='width: 50%;'>
-		""","T"=>html"""
-		<input type=number min=0.1 max=10000 value=0 style='width: 50%;'>
-		"""])
-	fields[name]
-end
-	
-
-# ╔═╡ b169a998-4b02-44ae-8945-3256b222cd8e
-
-notes_text = md"""
-	*  Notes :\
-	1) If you are providing 'Relative magnitude', you can provide any numbers such as 2 and 8; in which case it would mean that the second star is 8/2 or 4 times brighter than the first one.
-	3) If multiple boxes are ticked per quantity then the first unit will be chosen in the order of the list shown.
-	4) If no boxes are ticked then the first unit in the list will be chosen.
-	1) Inclination is the angle made by the plane of the orbit with our line of sight. 0 by default. 
-	2) Rotation is the angle made by the major-axis of the elliptical orbit with our line of sight. 0 by default.
-	3) Phase of 0 degrees corresponds to the highest angular separation of the bodies."""
-
-
-# ╔═╡ 3cc5622a-f80e-42e1-be1e-f7f7ec5e15ce
-gr()
-
-# ╔═╡ 749df0d6-5ace-42a5-8237-6351642c1f18
-function Units_Converter(parameters::Array{Float64,1})
-
-    # Define physical constants
-    M_sun = 1.989e30
-    M_jup = 1.898e27
-    M_ear = 5.972e24
-    R_sun = 6.957e8
-    R_jup = 6.9911e7
-    R_ear = 6.371e6
-
-    # Extract values and bools
-    m1, m2 = parameters[1], parameters[2]
-    r1, r2 = parameters[3], parameters[4]
-    l1, l2 = parameters[5], parameters[6]
-    a1, a2 = parameters[7], parameters[8]
-
-    m_sun1, m_jup1, m_ear1 = parameters[9], parameters[10], parameters[11]
-    r_sun1, r_jup1, r_ear1 = parameters[12], parameters[13], parameters[14]
-    l_app1, l_abs1, l_prop1 = parameters[15], parameters[16], parameters[17]
-
-    m_sun2, m_jup2, m_ear2 = parameters[18], parameters[19], parameters[20]
-    r_sun2, r_jup2, r_ear2 = parameters[21], parameters[22], parameters[23]
-    l_app2, l_abs2, l_prop2 = parameters[24], parameters[25], parameters[26]
-
-    # Convert masses
-    function convert_mass!(m, sun, jup, ear)
-        if sun == 1.0
-            m = m * M_sun
-        elseif jup == 1.0 
-            m = m * M_jup
-        elseif ear == 1.0
-            m = m * M_ear
-        end
-        return m
-    end
-
-    # Convert radii
-    function convert_radius!(r, sun, jup, ear)
-        if sun == 1.0
-            r = r * R_sun
-        elseif jup == 1.0
-            r = r * R_jup
-        elseif ear == 1.0
-            r = r * R_ear
-        end
-        return r
-    end
-
-    # Convert luminosities
-    function convert_luminosity!(l, app, abs, prop)
-        if app == 1.0 || abs == 1.0
-            l = 10^(-0.4 * l)
-        end
-        return l
-    end
-
-    # Apply conversions
-    parameters[1] = convert_mass!(m1, m_sun1, m_jup1, m_ear1)
-    parameters[2] = convert_mass!(m2, m_sun2, m_jup2, m_ear2)
-    parameters[3] = convert_radius!(r1, r_sun1, r_jup1, r_ear1)
-    parameters[4] = convert_radius!(r2, r_sun2, r_jup2, r_ear2)
-    parameters[5] = convert_luminosity!(l1, l_app1, l_abs1, l_prop1)
-    parameters[6] = convert_luminosity!(l2, l_app2, l_abs2, l_prop2)
-	parameters[7] = π*a1/180+π/2
-	parameters[8] = π*a2/180+π/2
-
-    # Normalize luminosities to ratios
-    if parameters[5] > parameters[6]
-        parameters[6] = parameters[6] / parameters[5]
-        parameters[5] = 1.0
-    else
-        parameters[5] = parameters[5] / parameters[6]
-        parameters[6] = 1.0
-    end
-end
-
-# ╔═╡ e4c5c3b3-4f44-4238-9706-f786d312dfa9
-G = 6.67430e-11 #Universal  gravitational constant
-
-# ╔═╡ 883de055-90c2-4f76-a947-4ccda5c3ec36
-function dip(rf, rb, d)
-    if d < abs(rf + rb)  # Case where the stars are obstructing each other
-        if d > abs(rb - rf)  # Case where the stars are only partially obstructing each other
-            return (rf^2 * acos((d^2 + rf^2 - rb^2) / (2 * d * rf)) + rb^2 * acos((d^2 + rb^2 - rf^2) / (2 * d * rb)) - 0.5 * sqrt((-d + rf + rb) * (d + rf - rb) * (d - rf + rb) * (d + rf + rb))) / (π * rb^2)  # The fraction of area between two overlapping circles
-        else
-            if rf > rb
-                return 1  # The star in front is bigger hence blocks 100% of the star in the back
-            else
-                return (rf / rb)^2  # The star in front, completely engulfed obstructs this much fraction of the area of the star in the background
-            end
-        end
-    else
-        return 0  # They do not obstruct each other at all
-    end
-end
-
-
-# ╔═╡ 35f044dd-edda-4a15-9183-fa2eb442efee
-# ╠═╡ disabled = true
-#=╠═╡
-for t in 1:fine_N
-	d = sqrt((r_1[t,1]-r_2[t,1])^2+(r_1[t,2]-r_2[t,2])^2)
-	if r_1[t,3] > r_2[t,3]
-		lc[t] = l1_si + l2_si*(1-dip(r1_si,r2_si,d))
-	else
-		lc[t] = l2_si + l1_si*(1-dip(r2_si,r1_si,d))
-	end
-end
-  ╠═╡ =#
-
-# ╔═╡ 8e64b487-4467-4b9b-a94d-745f6d9ef4d1
-# ╠═╡ disabled = true
-#=╠═╡
-for i in 1:fine_N
-	#This one is for rotation first then inclination
-	#vz[i] = (-1)*k*sin(θ_array[i])*sin(a1_si)*sin(a2_si)+k*(cos(θ_array[i])-e)*sin(a1_si)*cos(a2_si) 
-
-	#This one is for inclination first then rotation
-	vz_si[i] = k*(cos(θ_array[i])-e)*cos(a1_si)*a*(1-e^2)
-end
-  ╠═╡ =#
-
-# ╔═╡ 6e7a5513-0173-4b46-b80f-8b7e91d16fa2
-# ╠═╡ disabled = true
-#=╠═╡
-begin
-vz_si_1 = (-1)*m2_si/(m1_si+m2_si) * vz_si
-vz_si_2 = m1_si/(m1_si+m2_si) * vz_si
-end
-  ╠═╡ =#
-
-# ╔═╡ f847c848-498b-44f1-9bd7-631ca6591fd7
-# ╠═╡ disabled = true
-#=╠═╡
-begin
-	vz_kmps = vz_si/1000
-	vz_kmps_1 = vz_si_1/1000
-	vz_kmps_2 = vz_si_2/1000
-end
-  ╠═╡ =#
-
-# ╔═╡ 80d97a93-addb-49ee-b9bb-ffd51b7c9f3f
-nl = html"""<br>"""
-
-# ╔═╡ d6630bd9-9db0-4775-9921-4847d42f5a7f
-table1 = md"""|-------| Mass | Radius | Brightness | 
-|:-------|:------:|:--------:|:------------:|
-|**Body 1**|$(@bind m1 InputFields("m1"))|$(@bind r1 InputFields("r1"))|$(@bind l1 InputFields("l1"))|
-|**Units**| Solar masses M☉ $(@bind m_sun1 CheckBox(default=true)) $nl Jovian masses M♃ $(@bind m_jup1 CheckBox(default=false)) $nl Terran masses M🜨 $(@bind m_ear1 CheckBox(default=false)) | Solar radii R☉ $(@bind r_sun1 CheckBox(default=true)) $nl Jovian radii R♃ $(@bind r_jup1 CheckBox(default=false)) $nl Terran radii R🜨 $(@bind r_ear1 CheckBox(default=false))| Apparent Mag $(@bind l_app1 CheckBox(default=false)) $nl Absolute Mag $(@bind l_abs1 CheckBox(default=true)) $nl Relative Mag* $(@bind l_prop1 CheckBox(default=false)) |
-|**Body 2**|$(@bind m2 InputFields("m2"))|$(@bind r2 InputFields("r2"))|$(@bind l2 InputFields("l2"))||||||
-|**Units**| Solar masses M☉ $(@bind m_sun2 CheckBox(default=true)) $nl Jovian masses M♃ $(@bind m_jup2 CheckBox(default=false)) $nl Terran masses M🜨 $(@bind m_ear2 CheckBox(default=false)) | Solar radii R☉ $(@bind r_sun2 CheckBox(default=true)) $nl Jovian radii R♃ $(@bind r_jup2 CheckBox(default=false)) $nl Terran radii R🜨 $(@bind r_ear2 CheckBox(default=false))| Apparent Mag $(@bind l_app2 CheckBox(default=false)) $nl Absolute Mag $(@bind l_abs2 CheckBox(default=true)) $nl Relative Mag* $(@bind l_prop2 CheckBox(default=false)) | | | | | |
-
-|Period | Eccentricity | Inclination | Longitude of the Node |
-|:-----:|:------------:|:-------:|:------:|
-|$(@bind p InputFields("p"))|$(@bind e InputFields("e"))|$(@bind a1 InputFields("a1"))|$(@bind a2 InputFields("a2"))|
-|Days| Dimensionless | Degrees | Degrees |
-
-|Time under observation|Initial phase|
-|:--------------------:|:-----------:|
-| $(@bind T NumberField(1:1:10000, default=20)) Days |$(@bind ph InputFields("a")) Degrees|
-"""
-
-# ╔═╡ 244554e0-0c0a-44f3-aa36-4f20a7d5f1f0
-parameters = Float64[m1, m2, r1, r2, l1, l2, a1, a2, m_sun1, m_jup1, m_ear1, r_sun1, r_jup1, r_ear1, l_app1, l_abs1, l_prop1, m_sun2, m_jup2, m_ear2, r_sun2, r_jup2, r_ear2, l_app2, l_abs2, l_prop2]
-
-# ╔═╡ a81eda71-df5b-4c22-8535-2299b21e687e
-Units_Converter(parameters)
-
-# ╔═╡ bb91cfb8-73c8-48e3-a560-afc4754df629
-parameters
-
-# ╔═╡ b7c8e44d-6a50-475b-8c17-488facf80411
-m1_si, m2_si, r1_si, r2_si, l1_si, l2_si, a1_si, a2_si, p_si = parameters[1],parameters[2],parameters[3],parameters[4],parameters[5],parameters[6],parameters[7],parameters[8], 24*60*60*p
-
-# ╔═╡ 0b1f3787-63b0-4e5b-92d1-1bd0137ae654
-M = m1_si+m2_si
-
-# ╔═╡ ef682373-b7ea-4db2-9768-364478ffd709
-a = (p_si^2*G*M/(4*π^2))^(1/3)
-
-# ╔═╡ 29cdc985-6d8b-4af3-bd12-9284d222ddc2
-table2 = md"""
-| Quantity | Value | Units |
-|:--------:|:-----:|:-----:|
-| Mass 1   |$m1    | $(if m_sun1 unit="Solar masses" elseif m_jup1 unit="Jovian masses" elseif m_ear1 unit="Terran masses" end)|
-| Mass 2   |$m2    | $(if m_sun2 unit="Solar masses" elseif m_jup2 unit="Jovian masses" elseif m_ear2 unit="Terran masses" end)|
-| Radius 1   |$r2    | $(if r_sun1 unit="Solar radii" elseif r_jup1 unit="Jovian radii" elseif r_ear1 unit="Terran radii" end)|
-| Radius 2   |$r2    | $(if r_sun2 unit="Solar radii" elseif r_jup2 unit="Jovian radii" elseif r_ear2 unit="Terran radii" end)|
-| Brightness 1   |$l1    | $(if l_app1 unit="Apparent Magnitude" elseif l_abs1 unit="Absolute Magnitude" elseif l_prop1 unit="Proportional Brightness" end)|
-| Brightness 2   |$l2    | $(if l_app2 unit="Apparent Magnitude" elseif l_abs2 unit="Absolute Magnitude" elseif l_prop2 unit="Proportional Brightness" end)|
-| Orbital period | $p    | Days  |
-| Major Radius | $(round(a*6.684587e-12, digits=3))    | au  |
-| Eccentricity | $e | - |
-| Inclination  | $a1 | Degrees|
-| Rotation  | $a2 | Degrees|
-| Time under observation | $T | Days |
-| Initial phase | $ph | Degrees |
-"""
-
-# ╔═╡ f612299c-f5c1-44a5-a01f-ec50bb7d1cfa
-md"""
-| | |
-|---|---|
-|$table1|$table2|S
-
-$(@bind notes CheckBox())↑Click here for help
-"""
-
-# ╔═╡ 441a42cd-9119-4b47-a579-93c72933c5b3
-if notes display_text=notes_text end
-
-# ╔═╡ 3ffba8da-70a7-4368-9852-b0aaefd26df3
-begin
-	inclination_matrix = [[1, 0, 0] [0, cos(a1_si), sin(a1_si)] [0 ,-sin(a1_si), cos(a1_si)]]
-	rotation_matrix = [[cos(a2_si), sin(a2_si), 0] [-sin(a2_si), cos(a2_si), 0] [0,0,1]]
-	orientation_matrix = rotation_matrix*inclination_matrix
-end
-
-# ╔═╡ a7aae10b-115a-4eed-8e71-80aca6fee0d1
-k = 2π/(p_si*(1-e^2)^(3/2))
-
-# ╔═╡ ad935d2f-37c3-4760-8061-cec44392635f
-T_si = T*24*60*60
-
-# ╔═╡ 17ebccfa-737f-4e84-96cb-ce4c6db78c32
-Δt = T_si/(1000)
-
-# ╔═╡ 0a6a4cb3-57a6-48fa-9030-d11fff22264d
-fine_time = 0:Δt:T_si
-
-# ╔═╡ 65790931-4bea-471b-bbd4-60788bcddb43
-fine_N = length(fine_time)
-
-# ╔═╡ 1f85447f-2c40-4e0e-aac8-f821ef5bf59d
-begin
-	θ_array = zeros(fine_N)
-	θ_array[1] = ph*π/180
-	lc = zeros(fine_N)
-	r = zeros(fine_N,3)
-	vz_si = zeros(fine_N)
-end
-
-# ╔═╡ 20a065aa-6050-49ac-9885-e974a7a2a6bb
-for i in 2:fine_N
-	θ_array[Int(i)] = θ_array[Int(i)-1]+k*(1-e*cos(θ_array[Int(i)-1]))^2*Δt
-end
-
-# ╔═╡ f62b171e-8639-4264-bef3-7092dd545f01
-begin
-	
-	for i in 1:fine_N
-		r[i,1] = cos(θ_array[i])*a*(1-e^2)/(1-e*cos(θ_array[i]))
-		r[i,2] = sin(θ_array[i])*a*(1-e^2)/(1-e*cos(θ_array[i]))
-		vz_si[i] = k*(cos(θ_array[i])-e)*cos(a1_si)*a*(1-e^2)
-	end
-	
-	r_rotated = orientation_matrix*r'
-	r_rotated = r_rotated'
-	r_1 = (-1)*m2_si/(m1_si+m2_si)*r_rotated
-	r_2 = m1_si/(m1_si+m2_si)*r_rotated
-	vz_si_1 = (-1)*m2_si/(m1_si+m2_si) * vz_si
-	vz_si_2 = m1_si/(m1_si+m2_si) * vz_si
-
-	for t in 1:fine_N
-		d = sqrt((r_1[t,1]-r_2[t,1])^2+(r_1[t,2]-r_2[t,2])^2)
-		if r_1[t,3] > r_2[t,3]
-			lc[t] = l1_si + l2_si*(1-dip(r1_si,r2_si,d))
-		else
-			lc[t] = l2_si + l1_si*(1-dip(r2_si,r1_si,d))
-		end
-	end
-	
-end
-
-# ╔═╡ 827867ac-be6b-4d29-8585-c8ec76e585a7
-begin
-figsizepx = 500
-oneau = 1.495979e+11
-oneday = 24*60*60
-maxdist = (maximum(maximum, [r_1[:,1],r_1[:,2],r_2[:,1],r_2[:,2]])+maximum([r1_si,r2_si])*1.2)/oneau
-vz_si_1
-vz_si_2
-
-p1=plot(fine_time/oneday,lc/maximum(lc), ylim = (0,1.1),ylabel="Normalised Brightness", xlabel="Time(in days)",size=(figsizepx,figsizepx), title="Normalised lightcurve", legend=false)
-p2=plot(r_1[:,1]/oneau,r_1[:,2]/oneau, title="Trajectories from Earth PoV", aspect_ratio=1, xlabel="au", ylabel="au", legend=false, xlim=(-maxdist,maxdist), ylim=(-maxdist,maxdist), size=(figsizepx,figsizepx), lw=5)
-p2=plot!(r_2[:,1]/oneau,r_2[:,2]/oneau, aspect_ratio =1, xlim=(-maxdist,maxdist), ylim=(-maxdist,maxdist), size=(figsizepx,figsizepx))
-p2=scatter!([r_1[:,1][1]/oneau],[r_1[:,2][1]/oneau],markersize=r1_si*figsizepx/maxdist*0.5/oneau, markershape=:circle, markercolor=:deepskyblue3,aspect_ratio=1, size=(figsizepx,figsizepx))
-p2=scatter!([r_2[:,1][1]/oneau],[r_2[:,2][1]/oneau],markersize=r2_si*figsizepx/maxdist*0.5/oneau, markershape=:circle, markercolor=:orangered,aspect_ratio=1, size=(figsizepx,figsizepx))
-p2=plot!(r_2[:,1]/oneau,r_2[:,2]/oneau, color=:orange, aspect_ratio =1, xlim=(-maxdist,maxdist), ylim=(-maxdist,maxdist), size=(figsizepx,figsizepx),lw=5)
-p2=plot!(r_1[:,1]/oneau,r_1[:,2]/oneau, color=:deepskyblue, aspect_ratio=1, xlim=(-maxdist,maxdist), ylim=(-maxdist,maxdist), size=(figsizepx,figsizepx), lw=5)
-p3=plot(fine_time/oneday,vz_si_1/1000,xlabel="Time(in days)", ylabel="RV in km/s", legend=false, size=(figsizepx,figsizepx), title="Radial Velocity curves")
-p3=plot!(fine_time/oneday,vz_si_2/1000, size=(figsizepx,figsizepx))
-plot(p2,p1,p3,layout=(1,3), size=(3*figsizepx,figsizepx), margin=7mm)
-
-end
-
-# ╔═╡ b477f1c3-a20c-429b-adc9-cb1a32f1f12d
-# ╠═╡ disabled = true
-#=╠═╡
-function Units_Converter(parameters::Array{Float64,1})
-
-    # Define physical constants
-    M_sun = 1.989e30
-    M_jup = 1.898e27
-    M_ear = 5.972e24
-    R_sun = 6.957e8
-    R_jup = 6.9911e7
-    R_ear = 6.371e6
-
-    # Extract values and bools
-    m1, m2 = parameters[1], parameters[2]
-    r1, r2 = parameters[3], parameters[4]
-    l1, l2 = parameters[5], parameters[6]
-    a1, a2 = parameters[7], parameters[8]
-
-    m_sun1, m_jup1, m_ear1 = parameters[9], parameters[10], parameters[11]
-    r_sun1, r_jup1, r_ear1 = parameters[12], parameters[13], parameters[14]
-    l_app1, l_abs1, l_prop1 = parameters[15], parameters[16], parameters[17]
-    a_deg1, a_rad1 = parameters[18], parameters[19]
-
-    m_sun2, m_jup2, m_ear2 = parameters[20], parameters[21], parameters[22]
-    r_sun2, r_jup2, r_ear2 = parameters[23], parameters[24], parameters[25]
-    l_app2, l_abs2, l_prop2 = parameters[26], parameters[27], parameters[28]
-    a_deg2, a_rad2 = parameters[29], parameters[30]
-
-    # Convert masses
-    function convert_mass!(m, sun, jup, ear)
-        if sun == 1.0
-            m = m * M_sun
-        elseif jup == 1.0 
-            m = m * M_jup
-        elseif ear == 1.0
-            m = m * M_ear
-        end
-        return m
-    end
-
-    # Convert radii
-    function convert_radius!(r, sun, jup, ear)
-        if sun == 1.0
-            r = r * R_sun
-        elseif jup == 1.0
-            r = r * R_jup
-        elseif ear == 1.0
-            r = r * R_ear
-        end
-        return r
-    end
-
-    # Convert luminosities
-    function convert_luminosity!(l, app, abs, prop)
-        if app == 1.0 || abs == 1.0
-            l = 10^(-0.4 * l)
-        end
-        return l
-    end
-
-    # Convert angles
-    function convert_angle!(a, deg, rad)
-        if deg == 1.0
-            a = a * pi / 180
-        end
-        return a
-    end
-
-    # Apply conversions
-    parameters[1] = convert_mass!(m1, m_sun1, m_jup1, m_ear1)
-    parameters[2] = convert_mass!(m2, m_sun2, m_jup2, m_ear2)
-    parameters[3] = convert_radius!(r1, r_sun1, r_jup1, r_ear1)
-    parameters[4] = convert_radius!(r2, r_sun2, r_jup2, r_ear2)
-    parameters[5] = convert_luminosity!(l1, l_app1, l_abs1, l_prop1)
-    parameters[6] = convert_luminosity!(l2, l_app2, l_abs2, l_prop2)
-    parameters[7] = convert_angle!(a1, a_deg1, a_rad1)
-    parameters[8] = convert_angle!(a2, a_deg2, a_rad2)
-
-    # Normalize luminosities to ratios
-    if parameters[5] > parameters[6]
-        parameters[6] = parameters[6] / parameters[5]
-        parameters[5] = 1.0
-    else
-        parameters[5] = parameters[5] / parameters[6]
-        parameters[6] = 1.0
-    end
-end
-  ╠═╡ =#
-
-# ╔═╡ 87cfc2f0-d4fc-482f-9033-26039d4a521a
-# ╠═╡ disabled = true
-#=╠═╡
-html"""
-We require the following data:<br>
-
-<table style="border: 1px solid white;">
-	<tr>
-		<td >Masses</td>
-		<td >Radii</td>
-		<td >Luminosity/Magnitude</td>
-		<td >Orbital Period</td>
-		<td >Eccentricity</td>
-		<td >Orbital plane's angle with our line of sight</td>
-		<td >Elliptical orbit's orientation with the line of sight</td>
-	</tr>
-</table>
-
-"""
-  ╠═╡ =#
-
-# ╔═╡ ca52a528-6324-4bf2-a7fd-f4df99b90a19
-# ╠═╡ disabled = true
-#=╠═╡
-html""" <center> 
-Note that any one of the period or the semi-major axis (simply the radius in the case of a circular orbit) is sufficient to determine the orbit as they are simply related by Kepler's third law.<br><br>
-</center>"""
-  ╠═╡ =#
-
-# ╔═╡ 76c38153-1bfe-41f3-ada2-0e7ab0767d38
-# ╠═╡ disabled = true
-#=╠═╡
-html"""
-Additionally, we shall need<br>
-<center><div style="border: 1px solid white; width:60%;">The duration of observation and the number of observations</div></center><br>
-And optionally,<br>
-<center><div style="border: 1px solid white; width:40%;">The phase at the beginning</div></center>
-"""
-  ╠═╡ =#
-
-# ╔═╡ cb9844cf-a709-4a40-a20f-a0f2663c9119
-# ╠═╡ disabled = true
-#=╠═╡
-html"""
-From it, we will generate:<br>
-<table style="border: 1px solid white;">
-	<tr>
-		<td style="border: 1px solid white;">Orbit plots</td>
-		<td style="border: 1px solid white;">Lightcurve</td>
-		<td style="border: 1px solid white;">Radial Velocity curve</td>
-	</tr>
-</table>
-"""
-  ╠═╡ =#
-
-# ╔═╡ 6538798b-dcd5-43ad-b145-be922b9c5923
-# ╠═╡ disabled = true
-#=╠═╡
-html"""
-<b>And you shall be able to download them immediately!</b>
-"""
-  ╠═╡ =#
-
-# ╔═╡ afaddb45-67dd-46a8-974e-a1cb0403525e
-# ╠═╡ disabled = true
-#=╠═╡
-html"""
-Next we must decide on the units.<br>
-We shall provide many choices for units and write a function to convert them to the units which we shall use in our equations.<br>
-<br>
-The following choices of units are possible:<br>
-<table>
-	<tr>
-		<td style="border: 1px solid white;">Masses</td>
-		<td style="border: 1px solid white;">Radii</td>
-		<td style="border: 1px solid white;">Luminosity/Magnitude</td>
-		<td style="border: 1px solid white;">Orbital Period</td>
-		<td style="border: 1px solid white;">Eccentricity</td>
-		<td style="border: 1px solid white;">Orbital plane's angle with our line of sight</td>
-		<td style="border: 1px solid white;">Elliptical orbit's orientation with the line of sight</td>
-	</tr>
-	<tr>
-		<td style="border: 1px solid white;">Solar masses M<sub>☉</sub><br><br>Jovian masses M<sub>♃</sub><br><br>Terran masses M<sub>🜨</sub></td>
-		<td style="border: 1px solid white;">Solar radii r<sub>☉</sub><br><br>Jupiter radii r<sub>♃</sub><br><br>Earth radii r<sub>🜨</sub></td>
-		<td style="border: 1px solid white;">Apparent Magnitude<br><br>Absolute Magnitude<br><br>Proportional luminosities</td>
-		<td style="border: 1px solid white;">Days</td>
-		<td style="border: 1px solid white;">No units, <br>range 𝞊 [0,1)</td>
-		<td style="border: 1px solid white;">Radians<br><br>Degrees</td>
-		<td style="border: 1px solid white;">Radians<br><br>Degrees</td>
-	</tr>
-</table><br>
-<i>Note: These units are chosen for the convenience of astronomers who mainly work with these units.</i>
-"""
-  ╠═╡ =#
-
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
-Measures = "442fdcdd-2543-5da2-b0f3-8c86c306513e"
-PlotThemes = "ccf2f8ad-2431-5c83-bf29-c5338b663b6a"
+CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
+Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 
 [compat]
-Measures = "~0.3.2"
-PlotThemes = "~3.2.0"
-Plots = "~1.40.4"
+CSV = "~0.10.14"
+DataFrames = "~1.7.0"
+LaTeXStrings = "~1.3.1"
+Plots = "~1.40.5"
 PlutoUI = "~0.7.59"
 """
 
@@ -697,7 +419,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.10.4"
 manifest_format = "2.0"
-project_hash = "71b413c8bde98581d6d65475135f291b4dcbeef7"
+project_hash = "ada6ffb6116ca205e30a14539898626a5aa18041"
 
 [[deps.AbstractPlutoDingetjes]]
 deps = ["Pkg"]
@@ -726,6 +448,12 @@ git-tree-sha1 = "9e2a6b69137e6969bab0152632dcb3bc108c8bdd"
 uuid = "6e34b625-4abd-537c-b88f-471c36dfa7a0"
 version = "1.0.8+1"
 
+[[deps.CSV]]
+deps = ["CodecZlib", "Dates", "FilePathsBase", "InlineStrings", "Mmap", "Parsers", "PooledArrays", "PrecompileTools", "SentinelArrays", "Tables", "Unicode", "WeakRefStrings", "WorkerUtilities"]
+git-tree-sha1 = "6c834533dc1fabd820c1db03c839bf97e45a3fab"
+uuid = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+version = "0.10.14"
+
 [[deps.Cairo_jll]]
 deps = ["Artifacts", "Bzip2_jll", "CompilerSupportLibraries_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "JLLWrappers", "LZO_jll", "Libdl", "Pixman_jll", "Xorg_libXext_jll", "Xorg_libXrender_jll", "Zlib_jll", "libpng_jll"]
 git-tree-sha1 = "a2f1c8c668c8e3cb4cca4e57a8efdb09067bb3fd"
@@ -734,15 +462,15 @@ version = "1.18.0+2"
 
 [[deps.CodecZlib]]
 deps = ["TranscodingStreams", "Zlib_jll"]
-git-tree-sha1 = "b8fe8546d52ca154ac556809e10c75e6e7430ac8"
+git-tree-sha1 = "bce6804e5e6044c6daab27bb533d1295e4a2e759"
 uuid = "944b1d66-785c-5afd-91f1-9de20f533193"
-version = "0.7.5"
+version = "0.7.6"
 
 [[deps.ColorSchemes]]
 deps = ["ColorTypes", "ColorVectorSpace", "Colors", "FixedPointNumbers", "PrecompileTools", "Random"]
-git-tree-sha1 = "4b270d6465eb21ae89b732182c20dc165f8bf9f2"
+git-tree-sha1 = "b5278586822443594ff615963b0c09755771b3e0"
 uuid = "35d6a980-a343-548e-a6ea-1d62b119f2f4"
-version = "3.25.0"
+version = "3.26.0"
 
 [[deps.ColorTypes]]
 deps = ["FixedPointNumbers", "Random"]
@@ -770,9 +498,9 @@ version = "0.12.11"
 
 [[deps.Compat]]
 deps = ["TOML", "UUIDs"]
-git-tree-sha1 = "b1c55339b7c6c350ee89f2c1604299660525b248"
+git-tree-sha1 = "8ae8d32e09f0dcf42a36b90d4e17f5dd2e4c4215"
 uuid = "34da2185-b29b-5c13-b0c7-acf172513d20"
-version = "4.15.0"
+version = "4.16.0"
 weakdeps = ["Dates", "LinearAlgebra"]
 
     [deps.Compat.extensions]
@@ -794,16 +522,32 @@ git-tree-sha1 = "439e35b0b36e2e5881738abc8857bd92ad6ff9a8"
 uuid = "d38c429a-6771-53c6-b99e-75d170b6e991"
 version = "0.6.3"
 
+[[deps.Crayons]]
+git-tree-sha1 = "249fe38abf76d48563e2f4556bebd215aa317e15"
+uuid = "a8cc5b0e-0ffa-5ad4-8c14-923d3ee1735f"
+version = "4.1.1"
+
 [[deps.DataAPI]]
 git-tree-sha1 = "abe83f3a2f1b857aac70ef8b269080af17764bbe"
 uuid = "9a962f9c-6df0-11e9-0e5d-c546b8b5ee8a"
 version = "1.16.0"
+
+[[deps.DataFrames]]
+deps = ["Compat", "DataAPI", "DataStructures", "Future", "InlineStrings", "InvertedIndices", "IteratorInterfaceExtensions", "LinearAlgebra", "Markdown", "Missings", "PooledArrays", "PrecompileTools", "PrettyTables", "Printf", "Random", "Reexport", "SentinelArrays", "SortingAlgorithms", "Statistics", "TableTraits", "Tables", "Unicode"]
+git-tree-sha1 = "fb61b4812c49343d7ef0b533ba982c46021938a6"
+uuid = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+version = "1.7.0"
 
 [[deps.DataStructures]]
 deps = ["Compat", "InteractiveUtils", "OrderedCollections"]
 git-tree-sha1 = "1d0a14036acb104d9e89698bd408f63ab58cdc82"
 uuid = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
 version = "0.18.20"
+
+[[deps.DataValueInterfaces]]
+git-tree-sha1 = "bfc1187b79289637fa0ef6d4436ebdfe6905cbd6"
+uuid = "e2d170a0-9d28-54be-80f0-106bbe20a464"
+version = "1.0.0"
 
 [[deps.Dates]]
 deps = ["Printf"]
@@ -862,6 +606,17 @@ git-tree-sha1 = "466d45dc38e15794ec7d5d63ec03d776a9aff36e"
 uuid = "b22a6f82-2f65-5046-a5b2-351ab43fb4e5"
 version = "4.4.4+1"
 
+[[deps.FilePathsBase]]
+deps = ["Compat", "Dates"]
+git-tree-sha1 = "7878ff7172a8e6beedd1dea14bd27c3c6340d361"
+uuid = "48062228-2e41-5def-b9a4-89aafe57970f"
+version = "0.9.22"
+weakdeps = ["Mmap", "Test"]
+
+    [deps.FilePathsBase.extensions]
+    FilePathsBaseMmapExt = "Mmap"
+    FilePathsBaseTestExt = "Test"
+
 [[deps.FileWatching]]
 uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
 
@@ -894,23 +649,27 @@ git-tree-sha1 = "1ed150b39aebcc805c26b93a8d0122c940f64ce2"
 uuid = "559328eb-81f9-559d-9380-de523a88c83c"
 version = "1.0.14+0"
 
+[[deps.Future]]
+deps = ["Random"]
+uuid = "9fa8497b-333b-5362-9e8d-4d0656e87820"
+
 [[deps.GLFW_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libglvnd_jll", "Xorg_libXcursor_jll", "Xorg_libXi_jll", "Xorg_libXinerama_jll", "Xorg_libXrandr_jll", "libdecor_jll", "xkbcommon_jll"]
-git-tree-sha1 = "3f74912a156096bd8fdbef211eff66ab446e7297"
+git-tree-sha1 = "532f9126ad901533af1d4f5c198867227a7bb077"
 uuid = "0656b61e-2033-5cc2-a64a-77c0f6c09b89"
-version = "3.4.0+0"
+version = "3.4.0+1"
 
 [[deps.GR]]
-deps = ["Artifacts", "Base64", "DelimitedFiles", "Downloads", "GR_jll", "HTTP", "JSON", "Libdl", "LinearAlgebra", "Preferences", "Printf", "Random", "Serialization", "Sockets", "TOML", "Tar", "Test", "p7zip_jll"]
-git-tree-sha1 = "3e527447a45901ea392fe12120783ad6ec222803"
+deps = ["Artifacts", "Base64", "DelimitedFiles", "Downloads", "GR_jll", "HTTP", "JSON", "Libdl", "LinearAlgebra", "Preferences", "Printf", "Qt6Wayland_jll", "Random", "Serialization", "Sockets", "TOML", "Tar", "Test", "p7zip_jll"]
+git-tree-sha1 = "629693584cef594c3f6f99e76e7a7ad17e60e8d5"
 uuid = "28b8d3ca-fb5f-59d9-8090-bfdbd6d07a71"
-version = "0.73.6"
+version = "0.73.7"
 
 [[deps.GR_jll]]
 deps = ["Artifacts", "Bzip2_jll", "Cairo_jll", "FFMPEG_jll", "Fontconfig_jll", "FreeType2_jll", "GLFW_jll", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Libtiff_jll", "Pixman_jll", "Qt6Base_jll", "Zlib_jll", "libpng_jll"]
-git-tree-sha1 = "182c478a179b267dd7a741b6f8f4c3e0803795d6"
+git-tree-sha1 = "a8863b69c2a0859f2c2c87ebdc4c6712e88bdf0d"
 uuid = "d2c73de3-f751-5644-a686-071e5b155ba9"
-version = "0.73.6+0"
+version = "0.73.7+0"
 
 [[deps.Gettext_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Libiconv_jll", "Pkg", "XML2_jll"]
@@ -942,10 +701,10 @@ uuid = "cd3eb016-35fb-5094-929b-558a96fad6f3"
 version = "1.10.8"
 
 [[deps.HarfBuzz_jll]]
-deps = ["Artifacts", "Cairo_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "Graphite2_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Pkg"]
-git-tree-sha1 = "129acf094d168394e80ee1dc4bc06ec835e510a3"
+deps = ["Artifacts", "Cairo_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "Graphite2_jll", "JLLWrappers", "Libdl", "Libffi_jll"]
+git-tree-sha1 = "401e4f3f30f43af2c8478fc008da50096ea5240f"
 uuid = "2e76f6c2-a576-52d4-95c1-20adfe4de566"
-version = "2.8.1+1"
+version = "8.3.1+0"
 
 [[deps.Hyperscript]]
 deps = ["Test"]
@@ -965,14 +724,37 @@ git-tree-sha1 = "8b72179abc660bfab5e28472e019392b97d0985c"
 uuid = "b5f81e59-6552-4d32-b1f0-c071b021bf89"
 version = "0.2.4"
 
+[[deps.InlineStrings]]
+git-tree-sha1 = "45521d31238e87ee9f9732561bfee12d4eebd52d"
+uuid = "842dd82b-1e85-43dc-bf29-5d0ee9dffc48"
+version = "1.4.2"
+
+    [deps.InlineStrings.extensions]
+    ArrowTypesExt = "ArrowTypes"
+    ParsersExt = "Parsers"
+
+    [deps.InlineStrings.weakdeps]
+    ArrowTypes = "31f734f8-188a-4ce0-8406-c8a06bd891cd"
+    Parsers = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
+
 [[deps.InteractiveUtils]]
 deps = ["Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
+
+[[deps.InvertedIndices]]
+git-tree-sha1 = "0dc7b50b8d436461be01300fd8cd45aa0274b038"
+uuid = "41ab1584-1d38-5bbf-9106-f11c6c58b48f"
+version = "1.3.0"
 
 [[deps.IrrationalConstants]]
 git-tree-sha1 = "630b497eafcc20001bba38a4651b327dcfc491d2"
 uuid = "92d709cd-6900-40b7-9082-c6be49f344b6"
 version = "0.2.2"
+
+[[deps.IteratorInterfaceExtensions]]
+git-tree-sha1 = "a3f24677c21f5bbe9d2a714f95dcd58337fb2856"
+uuid = "82899510-4779-5014-852e-03e436cf321d"
+version = "1.0.0"
 
 [[deps.JLFzf]]
 deps = ["Pipe", "REPL", "Random", "fzf_jll"]
@@ -982,9 +764,9 @@ version = "0.1.7"
 
 [[deps.JLLWrappers]]
 deps = ["Artifacts", "Preferences"]
-git-tree-sha1 = "7e5d6779a1e09a36db2a7b6cff50942a0a7d0fca"
+git-tree-sha1 = "f389674c99bfcde17dc57454011aa44d5a260a40"
 uuid = "692b3bcd-3c85-4b1f-b108-f13ce0eb3210"
-version = "1.5.0"
+version = "1.6.0"
 
 [[deps.JSON]]
 deps = ["Dates", "Mmap", "Parsers", "Unicode"]
@@ -994,9 +776,9 @@ version = "0.21.4"
 
 [[deps.JpegTurbo_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "c84a835e1a09b289ffcd2271bf2a337bbdda6637"
+git-tree-sha1 = "25ee0be4d43d0269027024d75a24c24d6c6e590c"
 uuid = "aacddb02-875f-59d6-b918-886e6ef4fbf8"
-version = "3.0.3+0"
+version = "3.0.4+0"
 
 [[deps.LAME_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -1012,15 +794,15 @@ version = "3.0.0+1"
 
 [[deps.LLVMOpenMP_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "d986ce2d884d49126836ea94ed5bfb0f12679713"
+git-tree-sha1 = "78211fb6cbc872f77cad3fc0b6cf647d923f4929"
 uuid = "1d63c593-3942-5779-bab2-d838dc0a180e"
-version = "15.0.7+0"
+version = "18.1.7+0"
 
 [[deps.LZO_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "70c5da094887fd2cae843b8db33920bac4b6f07d"
+git-tree-sha1 = "854a9c268c43b77b0a27f22d7fab8d33cdb3a731"
 uuid = "dd4b983a-f0e5-5f8d-a1b7-129d4a5fb1ac"
-version = "2.10.2+0"
+version = "2.10.2+1"
 
 [[deps.LaTeXStrings]]
 git-tree-sha1 = "50901ebc375ed41dbf8058da26f9de442febbbec"
@@ -1223,15 +1005,15 @@ version = "1.4.3"
 
 [[deps.OpenSSL_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "a028ee3cb5641cccc4c24e90c36b0a4f7707bdf5"
+git-tree-sha1 = "7493f61f55a6cce7325f197443aa80d32554ba10"
 uuid = "458c3c95-2e84-50aa-8efc-19380b2a3a95"
-version = "3.0.14+0"
+version = "3.0.15+1"
 
 [[deps.Opus_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "51a08fb14ec28da2ec7a927c4337e4332c2a4720"
+deps = ["Artifacts", "JLLWrappers", "Libdl"]
+git-tree-sha1 = "6703a85cb3781bd5909d48730a67205f3f31a575"
 uuid = "91d4177d-7536-5919-b921-800302f37372"
-version = "1.3.2+0"
+version = "1.3.3+0"
 
 [[deps.OrderedCollections]]
 git-tree-sha1 = "dfdf5519f235516220579f949664f1bf44e741c5"
@@ -1245,9 +1027,9 @@ version = "10.42.0+1"
 
 [[deps.Pango_jll]]
 deps = ["Artifacts", "Cairo_jll", "Fontconfig_jll", "FreeType2_jll", "FriBidi_jll", "Glib_jll", "HarfBuzz_jll", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "cb5a2ab6763464ae0f19c86c56c63d4a2b0f5bda"
+git-tree-sha1 = "e127b609fb9ecba6f201ba7ab753d5a605d53801"
 uuid = "36c8627f-9965-5494-a995-c6b170f724f3"
-version = "1.52.2+0"
+version = "1.54.1+0"
 
 [[deps.Parsers]]
 deps = ["Dates", "PrecompileTools", "UUIDs"]
@@ -1284,10 +1066,10 @@ uuid = "995b91a9-d308-5afd-9ec6-746e21dbc043"
 version = "1.4.1"
 
 [[deps.Plots]]
-deps = ["Base64", "Contour", "Dates", "Downloads", "FFMPEG", "FixedPointNumbers", "GR", "JLFzf", "JSON", "LaTeXStrings", "Latexify", "LinearAlgebra", "Measures", "NaNMath", "Pkg", "PlotThemes", "PlotUtils", "PrecompileTools", "Printf", "REPL", "Random", "RecipesBase", "RecipesPipeline", "Reexport", "RelocatableFolders", "Requires", "Scratch", "Showoff", "SparseArrays", "Statistics", "StatsBase", "UUIDs", "UnicodeFun", "UnitfulLatexify", "Unzip"]
-git-tree-sha1 = "442e1e7ac27dd5ff8825c3fa62fbd1e86397974b"
+deps = ["Base64", "Contour", "Dates", "Downloads", "FFMPEG", "FixedPointNumbers", "GR", "JLFzf", "JSON", "LaTeXStrings", "Latexify", "LinearAlgebra", "Measures", "NaNMath", "Pkg", "PlotThemes", "PlotUtils", "PrecompileTools", "Printf", "REPL", "Random", "RecipesBase", "RecipesPipeline", "Reexport", "RelocatableFolders", "Requires", "Scratch", "Showoff", "SparseArrays", "Statistics", "StatsBase", "TOML", "UUIDs", "UnicodeFun", "UnitfulLatexify", "Unzip"]
+git-tree-sha1 = "082f0c4b70c202c37784ce4bfbc33c9f437685bf"
 uuid = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
-version = "1.40.4"
+version = "1.40.5"
 
     [deps.Plots.extensions]
     FileIOExt = "FileIO"
@@ -1309,6 +1091,12 @@ git-tree-sha1 = "ab55ee1510ad2af0ff674dbcced5e94921f867a9"
 uuid = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 version = "0.7.59"
 
+[[deps.PooledArrays]]
+deps = ["DataAPI", "Future"]
+git-tree-sha1 = "36d8b4b899628fb92c2749eb488d884a926614d3"
+uuid = "2dfb63ee-cc39-5dd5-95bd-886bf059d720"
+version = "1.4.3"
+
 [[deps.PrecompileTools]]
 deps = ["Preferences"]
 git-tree-sha1 = "5aa36f7049a63a1528fe8f7c3f2113413ffd4e1f"
@@ -1321,6 +1109,12 @@ git-tree-sha1 = "9306f6085165d270f7e3db02af26a400d580f5c6"
 uuid = "21216c6a-2e73-6563-6e65-726566657250"
 version = "1.4.3"
 
+[[deps.PrettyTables]]
+deps = ["Crayons", "LaTeXStrings", "Markdown", "PrecompileTools", "Printf", "Reexport", "StringManipulation", "Tables"]
+git-tree-sha1 = "1101cd475833706e4d0e7b122218257178f48f34"
+uuid = "08abe8d2-0d0c-5749-adfa-8a2ac140af0d"
+version = "2.4.0"
+
 [[deps.Printf]]
 deps = ["Unicode"]
 uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
@@ -1329,6 +1123,24 @@ uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Fontconfig_jll", "Glib_jll", "JLLWrappers", "Libdl", "Libglvnd_jll", "OpenSSL_jll", "Vulkan_Loader_jll", "Xorg_libSM_jll", "Xorg_libXext_jll", "Xorg_libXrender_jll", "Xorg_libxcb_jll", "Xorg_xcb_util_cursor_jll", "Xorg_xcb_util_image_jll", "Xorg_xcb_util_keysyms_jll", "Xorg_xcb_util_renderutil_jll", "Xorg_xcb_util_wm_jll", "Zlib_jll", "libinput_jll", "xkbcommon_jll"]
 git-tree-sha1 = "492601870742dcd38f233b23c3ec629628c1d724"
 uuid = "c0090381-4147-56d7-9ebc-da0b1113ec56"
+version = "6.7.1+1"
+
+[[deps.Qt6Declarative_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Qt6Base_jll", "Qt6ShaderTools_jll"]
+git-tree-sha1 = "e5dd466bf2569fe08c91a2cc29c1003f4797ac3b"
+uuid = "629bc702-f1f5-5709-abd5-49b8460ea067"
+version = "6.7.1+2"
+
+[[deps.Qt6ShaderTools_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Qt6Base_jll"]
+git-tree-sha1 = "1a180aeced866700d4bebc3120ea1451201f16bc"
+uuid = "ce943373-25bb-56aa-8eca-768745ed7b5a"
+version = "6.7.1+1"
+
+[[deps.Qt6Wayland_jll]]
+deps = ["Artifacts", "JLLWrappers", "Libdl", "Qt6Base_jll", "Qt6Declarative_jll"]
+git-tree-sha1 = "729927532d48cf79f49070341e1d918a65aba6b0"
+uuid = "e99dba38-086e-5de3-a5b1-6e4c66e897c3"
 version = "6.7.1+1"
 
 [[deps.REPL]]
@@ -1378,6 +1190,12 @@ git-tree-sha1 = "3bac05bc7e74a75fd9cba4295cde4045d9fe2386"
 uuid = "6c6a2e73-6563-6170-7368-637461726353"
 version = "1.2.1"
 
+[[deps.SentinelArrays]]
+deps = ["Dates", "Random"]
+git-tree-sha1 = "ff11acffdb082493657550959d4feb4b6149e73a"
+uuid = "91c51154-3ec4-41a3-a24f-3f23e20d615c"
+version = "1.4.5"
+
 [[deps.Serialization]]
 uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
 
@@ -1423,6 +1241,12 @@ git-tree-sha1 = "5cf7606d6cef84b543b483848d4ae08ad9832b21"
 uuid = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 version = "0.34.3"
 
+[[deps.StringManipulation]]
+deps = ["PrecompileTools"]
+git-tree-sha1 = "a6b1675a536c5ad1a60e5a5153e1fee12eb146e3"
+uuid = "892a3eda-7b42-436c-8928-eab12a02cf0e"
+version = "0.4.0"
+
 [[deps.SuiteSparse_jll]]
 deps = ["Artifacts", "Libdl", "libblastrampoline_jll"]
 uuid = "bea87d4a-7f5b-5778-9afe-8cc45184846c"
@@ -1432,6 +1256,18 @@ version = "7.2.1+1"
 deps = ["Dates"]
 uuid = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
 version = "1.0.3"
+
+[[deps.TableTraits]]
+deps = ["IteratorInterfaceExtensions"]
+git-tree-sha1 = "c06b2f539df1c6efa794486abfb6ed2022561a39"
+uuid = "3783bdb8-4a98-5b6b-af9a-565f29a5fe9c"
+version = "1.0.1"
+
+[[deps.Tables]]
+deps = ["DataAPI", "DataValueInterfaces", "IteratorInterfaceExtensions", "OrderedCollections", "TableTraits"]
+git-tree-sha1 = "598cd7c1f68d1e205689b1c2fe65a9f85846f297"
+uuid = "bd369af6-aec1-5ad0-b16a-f7cc5008161c"
+version = "1.12.0"
 
 [[deps.Tar]]
 deps = ["ArgTools", "SHA"]
@@ -1449,18 +1285,14 @@ deps = ["InteractiveUtils", "Logging", "Random", "Serialization"]
 uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [[deps.TranscodingStreams]]
-git-tree-sha1 = "60df3f8126263c0d6b357b9a1017bb94f53e3582"
+git-tree-sha1 = "e84b3a11b9bece70d14cce63406bbc79ed3464d2"
 uuid = "3bb67fe8-82b1-5028-8e26-92a6c54297fa"
-version = "0.11.0"
-weakdeps = ["Random", "Test"]
-
-    [deps.TranscodingStreams.extensions]
-    TestExt = ["Test", "Random"]
+version = "0.11.2"
 
 [[deps.Tricks]]
-git-tree-sha1 = "eae1bb484cd63b36999ee58be2de6c178105112f"
+git-tree-sha1 = "7822b97e99a1672bfb1b49b668a6d46d58d8cbcb"
 uuid = "410a4b4d-49e4-4fbc-ab6d-cb71b17b3775"
-version = "0.1.8"
+version = "0.1.9"
 
 [[deps.URIs]]
 git-tree-sha1 = "67db6cc7b3821e19ebe75791a9dd19c9b1188f2b"
@@ -1482,9 +1314,9 @@ version = "0.4.1"
 
 [[deps.Unitful]]
 deps = ["Dates", "LinearAlgebra", "Random"]
-git-tree-sha1 = "dd260903fdabea27d9b6021689b3cd5401a57748"
+git-tree-sha1 = "d95fe458f26209c66a187b1114df96fd70839efd"
 uuid = "1986cc42-f94f-5a68-af5c-568840ba703d"
-version = "1.20.0"
+version = "1.21.0"
 
     [deps.Unitful.extensions]
     ConstructionBaseUnitfulExt = "ConstructionBase"
@@ -1523,11 +1355,22 @@ git-tree-sha1 = "93f43ab61b16ddfb2fd3bb13b3ce241cafb0e6c9"
 uuid = "2381bf8a-dfd0-557d-9999-79630e7b1b91"
 version = "1.31.0+0"
 
+[[deps.WeakRefStrings]]
+deps = ["DataAPI", "InlineStrings", "Parsers"]
+git-tree-sha1 = "b1be2855ed9ed8eac54e5caff2afcdb442d52c23"
+uuid = "ea10d353-3f73-51f8-a26c-33c1cb351aa5"
+version = "1.4.2"
+
+[[deps.WorkerUtilities]]
+git-tree-sha1 = "cd1659ba0d57b71a464a29e64dbc67cfe83d54e7"
+uuid = "76eceee3-57b5-4d4a-8e66-0e911cebbf60"
+version = "1.6.1"
+
 [[deps.XML2_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libiconv_jll", "Zlib_jll"]
-git-tree-sha1 = "d9717ce3518dc68a99e6b96300813760d887a01d"
+git-tree-sha1 = "1165b0443d0eca63ac1e32b8c0eb69ed2f4f8127"
 uuid = "02c8fc9c-b97f-50b9-bbe4-9be30ff0a78a"
-version = "2.13.1+0"
+version = "2.13.3+0"
 
 [[deps.XSLT_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libgcrypt_jll", "Libgpg_error_jll", "Libiconv_jll", "XML2_jll", "Zlib_jll"]
@@ -1721,10 +1564,10 @@ uuid = "a4ae2306-e953-59d6-aa16-d00cac43593b"
 version = "3.9.0+0"
 
 [[deps.libass_jll]]
-deps = ["Artifacts", "Bzip2_jll", "FreeType2_jll", "FriBidi_jll", "HarfBuzz_jll", "JLLWrappers", "Libdl", "Pkg", "Zlib_jll"]
-git-tree-sha1 = "5982a94fcba20f02f42ace44b9894ee2b140fe47"
+deps = ["Artifacts", "Bzip2_jll", "FreeType2_jll", "FriBidi_jll", "HarfBuzz_jll", "JLLWrappers", "Libdl", "Zlib_jll"]
+git-tree-sha1 = "e17c115d55c5fbb7e52ebedb427a0dca79d4484e"
 uuid = "0ac62f75-1d6f-5e53-bd7c-93b484bb37c0"
-version = "0.15.1+0"
+version = "0.15.2+0"
 
 [[deps.libblastrampoline_jll]]
 deps = ["Artifacts", "Libdl"]
@@ -1744,10 +1587,10 @@ uuid = "2db6ffa8-e38f-5e21-84af-90c45d0032cc"
 version = "1.11.0+0"
 
 [[deps.libfdk_aac_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "daacc84a041563f965be61859a36e17c4e4fcd55"
+deps = ["Artifacts", "JLLWrappers", "Libdl"]
+git-tree-sha1 = "8a22cf860a7d27e4f3498a0fe0811a7957badb38"
 uuid = "f638f0a6-7fb0-5443-88ba-1cc74229b280"
-version = "2.0.2+0"
+version = "2.0.3+0"
 
 [[deps.libinput_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg", "eudev_jll", "libevdev_jll", "mtdev_jll"]
@@ -1763,9 +1606,9 @@ version = "1.6.43+1"
 
 [[deps.libvorbis_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Ogg_jll", "Pkg"]
-git-tree-sha1 = "b910cb81ef3fe6e78bf6acee440bda86fd6ae00c"
+git-tree-sha1 = "490376214c4721cdaca654041f635213c6165cb3"
 uuid = "f27f6e37-5d2b-51aa-960f-b287f2bc3b7a"
-version = "1.3.7+1"
+version = "1.3.7+2"
 
 [[deps.mtdev_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -1803,54 +1646,61 @@ version = "1.4.1+1"
 """
 
 # ╔═╡ Cell order:
-# ╟─7034449a-0a5a-4fc5-bd0a-6fe6f122ddd8
-# ╟─a9e0dae6-3e81-11ef-2237-e5f5266ba165
-# ╟─5a87c818-cda3-432e-8c92-0d7062641536
-# ╟─f612299c-f5c1-44a5-a01f-ec50bb7d1cfa
-# ╟─441a42cd-9119-4b47-a579-93c72933c5b3
-# ╟─827867ac-be6b-4d29-8585-c8ec76e585a7
-# ╟─f5023337-2a14-4f87-9339-1652d69384a2
-# ╟─08a182e1-8366-4b08-bfdd-2a9826befcd2
-# ╟─b2bb5a20-15ab-41d8-b216-427a9ff4d1ef
-# ╟─6dd71405-febd-44a4-ad17-066a009ecbca
-# ╠═e46f99ed-2156-4935-be60-c8c2fa32732f
-# ╠═919c3c1c-d89f-4ddf-970b-c7ef04f2e24f
-# ╠═79473dc0-b4e9-429e-a721-62ddaa2f5b34
-# ╟─127c4717-9c1d-4051-ac91-bff955c16a10
-# ╟─d6630bd9-9db0-4775-9921-4847d42f5a7f
-# ╟─29cdc985-6d8b-4af3-bd12-9284d222ddc2
-# ╟─b169a998-4b02-44ae-8945-3256b222cd8e
-# ╠═44221ff5-fa5e-40a6-ab86-adec81929ae8
-# ╠═3cc5622a-f80e-42e1-be1e-f7f7ec5e15ce
-# ╟─244554e0-0c0a-44f3-aa36-4f20a7d5f1f0
-# ╟─749df0d6-5ace-42a5-8237-6351642c1f18
-# ╟─a81eda71-df5b-4c22-8535-2299b21e687e
-# ╟─bb91cfb8-73c8-48e3-a560-afc4754df629
-# ╟─e4c5c3b3-4f44-4238-9706-f786d312dfa9
-# ╟─b7c8e44d-6a50-475b-8c17-488facf80411
-# ╟─0b1f3787-63b0-4e5b-92d1-1bd0137ae654
-# ╟─ef682373-b7ea-4db2-9768-364478ffd709
-# ╟─a7aae10b-115a-4eed-8e71-80aca6fee0d1
-# ╟─ad935d2f-37c3-4760-8061-cec44392635f
-# ╟─17ebccfa-737f-4e84-96cb-ce4c6db78c32
-# ╟─0a6a4cb3-57a6-48fa-9030-d11fff22264d
-# ╟─65790931-4bea-471b-bbd4-60788bcddb43
-# ╟─1f85447f-2c40-4e0e-aac8-f821ef5bf59d
-# ╟─20a065aa-6050-49ac-9885-e974a7a2a6bb
-# ╟─3ffba8da-70a7-4368-9852-b0aaefd26df3
-# ╟─f62b171e-8639-4264-bef3-7092dd545f01
-# ╟─883de055-90c2-4f76-a947-4ccda5c3ec36
-# ╟─35f044dd-edda-4a15-9183-fa2eb442efee
-# ╟─8e64b487-4467-4b9b-a94d-745f6d9ef4d1
-# ╟─6e7a5513-0173-4b46-b80f-8b7e91d16fa2
-# ╟─f847c848-498b-44f1-9bd7-631ca6591fd7
-# ╟─80d97a93-addb-49ee-b9bb-ffd51b7c9f3f
-# ╟─b477f1c3-a20c-429b-adc9-cb1a32f1f12d
-# ╟─87cfc2f0-d4fc-482f-9033-26039d4a521a
-# ╟─ca52a528-6324-4bf2-a7fd-f4df99b90a19
-# ╟─76c38153-1bfe-41f3-ada2-0e7ab0767d38
-# ╟─cb9844cf-a709-4a40-a20f-a0f2663c9119
-# ╟─6538798b-dcd5-43ad-b145-be922b9c5923
-# ╟─afaddb45-67dd-46a8-974e-a1cb0403525e
+# ╟─c98d15f0-8586-4e10-96c6-9dc41d857589
+# ╟─4b32f9bc-fa07-48fb-95ad-b7eaf76b4f8f
+# ╠═c8ac7694-e899-4861-808e-953d6415ff7d
+# ╟─5feb0f4c-f910-476c-bccb-ea994e9b3201
+# ╟─f042a4bf-b91c-4c58-828f-18d343359ade
+# ╟─42d8ad04-dc6b-41bf-a1da-efbbb5122d6b
+# ╟─6b1a3512-077d-4014-a8d6-e3f473d8df92
+# ╟─31b4bc0d-5ae2-484b-83a8-a342b24b9e93
+# ╟─e17f4a4d-3483-4e15-96b0-3badd8d63e99
+# ╠═ece358df-c4bb-4099-b2cf-f8c43f2489b1
+# ╟─2ad0fa98-d5d0-460a-9929-3f0908c527a1
+# ╠═1df19403-2433-4867-adf2-68f778ea465b
+# ╟─143c3fd6-fea9-4698-b19f-8ae9148b9b87
+# ╟─b8ba1849-8b80-4ff0-ab79-7a32669c3f01
+# ╟─716fe00d-bc1b-4b7b-89b5-b8ca1e1a13cf
+# ╟─d636847e-620e-40eb-a7f1-2254176bdc98
+# ╠═8cab1633-e238-418a-93be-97b104bc88fc
+# ╟─2240b565-940f-436d-aff7-07135fbdc0de
+# ╟─2720bf2f-b371-4d02-9f1f-eebf47bafe3c
+# ╟─254e631d-a576-4eba-be90-0dd971263d7c
+# ╠═ed8547cc-385f-46b3-ab34-ef00e2b1219b
+# ╟─faadeca7-ea8f-4f00-ab3e-a23ad659012f
+# ╟─8925c79a-d454-46c9-a01c-79b994465b1d
+# ╟─1b8da048-df8a-4eb7-a973-15c14e8323dd
+# ╟─326563f7-495c-4ae9-ba86-eb8371bfb82e
+# ╠═87a07080-efe0-45ec-9662-8b0a277241f9
+# ╟─a1ff6a25-fdea-46fe-a8d7-bc66db7496b7
+# ╠═931b2932-e71b-469b-a3e2-2ff3e5fd9ef9
+# ╟─20da3c6d-0c0b-4b04-951a-17e53986ed95
+# ╠═560de6b1-f491-42bd-a7b0-8ec88e11a355
+# ╟─99913d87-432d-405e-99bc-98f8eaeefaba
+# ╟─1cb01538-90eb-43e6-aa99-07a508d248f9
+# ╟─ac93804b-c12b-4957-b492-f2b22838e46f
+# ╟─39588ce9-776c-4949-bfb0-cb9a53fefd45
+# ╟─c2b55734-37d4-4a79-a8d6-b7161ce26c5d
+# ╟─021a0570-3d96-4616-9665-c3f2115c6dc3
+# ╟─aa6d6452-ad27-4575-9765-747b975997d6
+# ╟─6a587048-1233-4736-8059-13af77ee43c8
+# ╟─59116a1b-eabf-4302-aa66-36df1aeea8a0
+# ╟─505f0ea1-8780-49fd-93ff-a8191e7cc69e
+# ╟─d48bc205-8778-4152-8587-ba2f43f1d02f
+# ╟─e70a4a63-127d-4c2e-9dab-1e1e82da7386
+# ╟─b3cfb448-bed2-4c0b-be7d-ca308ccf5951
+# ╟─8274fb7f-46b0-40f8-85c9-7554a3ed61a2
+# ╟─1687ceac-45ad-4e0c-8ff2-2d2c1be5cfc7
+# ╟─d5042724-8841-4639-a3af-b33c267aac4b
+# ╟─b9690ae8-da84-4ea0-adba-d220c98daec8
+# ╟─8b400c5a-95a6-44f9-8ea9-3377548a1736
+# ╟─2b15bba8-bcd9-4361-883b-0f8bef0f4364
+# ╟─e56cae68-a7e0-46ee-b518-2875f770673b
+# ╟─9baa0eb3-7f4c-4d39-94bc-3914be3549c6
+# ╟─5a0c56d6-c712-4749-944f-40d2556a9d07
+# ╟─1e5e0043-67e4-4a03-a2bf-ecc9006116d2
+# ╟─a622ee70-815b-11ef-3728-7b3ed1807d09
+# ╟─4b84a61e-47a8-4e83-8320-01dcf3d99ee5
+# ╠═4eefc911-7488-4a63-8040-347a33abb170
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
