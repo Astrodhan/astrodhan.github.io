@@ -20,7 +20,7 @@ def generate_page(poems):
     return f'''<!DOCTYPE html>
 <html>
 <head>
-    <title>Poetry and notes</title>
+    <title>Poetry and Notes</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../styles.css">
@@ -55,7 +55,7 @@ def generate_page(poems):
 <body>
 <table class="table">
     <tr>
-        <td><h1>Poetry and notes</h1></td>
+        <td><h1>Poetry and Notes</h1></td>
     </tr>
     <tr>
         <td class="intable">
