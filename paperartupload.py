@@ -2,10 +2,10 @@ import os
 from bs4 import BeautifulSoup
 
 # Path to your images folder
-images_folder = "/home/yashodhan/Documents/website/astrodhan.github.io/dirart/Paper"
+images_folder = "dirart/Paper"
 
 # Path to your gallery HTML file
-gallery_html_file = "/home/yashodhan/Documents/website/astrodhan.github.io/dirart/paper.html"
+gallery_html_file = "dirart/paper.html"
 
 # Get list of image files in the images folder
 images = sorted([f for f in os.listdir(images_folder) if os.path.isfile(os.path.join(images_folder, f))])
